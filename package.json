@@ -4,6 +4,7 @@
   "description": "",
   "main": "content.js",
   "dependencies": {
+    "chai-http": "^4.0.0",
     "express": "^4.16.3",
     "mocha": "^5.2.0"
   },
