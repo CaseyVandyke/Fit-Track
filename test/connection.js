@@ -1,9 +1,9 @@
 "use strict";
-
+const mongoose = require('mongoose');
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 const expect = chai.expect;
-const app = require("../server.js");
+const app = require("../server")
 chai.use(chaiHttp);
 
 describe("index page", function() {
