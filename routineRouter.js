@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
 
-const {RoutineSchema} = require('./models/routines');
+const {RoutineSchema} = require('./routines');
 
 RoutineSchema.create(
     'Biceps', 'Curls', 4, 12

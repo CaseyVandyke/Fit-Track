@@ -8,7 +8,7 @@ const routineRouter = require('./routineRouter')
 
 app.use(express.static("public"));
 
-app.use('../model/routines', routineRouter);
+app.use('./routines', routineRouter);
 
 //log the http layer
 app.use(morgan('common'));
