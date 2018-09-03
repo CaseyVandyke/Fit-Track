@@ -1,7 +1,7 @@
 const uuid = require('uuid');
 
 const Routines = {
-        create: function (cycle, workout, sets, reps, author) {
+        create: function (cycle, workout, sets, reps, author, publishDate) {
             const post = {
                 id: uuid.v4(),
                 cycle: cycle,
@@ -24,4 +24,11 @@ const Routines = {
             });
         }
     };
-    
+
+    function createWorkout() {
+        const storage = Object.create(Routines);
+        storage.posts = [];
+        return storage;
+      }
+
+      module.exports = {Routines: createWorkout()};

@@ -10,3 +10,8 @@ Routines.create('biceps', 'curls', 4, 12, 'Casey Van Dyke');
 Routines.create('shoulders', 'flies', 4, 12, 'Casey Van Dyke');
 Routines.create('chest', 'bench press', 4, 12, 'Casey Van Dyke');
 
+router.get('/', (req, res) => {
+    res.json(Routines.get());
+});
+
+module.exports = router;
