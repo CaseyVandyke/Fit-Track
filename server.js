@@ -1,22 +1,20 @@
-"use strict";
 
-const express = require("express");
+const express = require('express');
+const router = express.Router();
 const morgan = require('morgan');
+const bodyParser = require('body-parser');
+
+const routineRouter = require('./routineRouter');
+
+const jsonParser = bodyParser.json();
 const app = express();
 
-const routineRouter = require('./routineRouter')
-
-app.use(express.static("public"));
-
-app.use('./routines', routineRouter);
-
-//log the http layer
 app.use(morgan('common'));
 
-if (require.main === module) {
-  app.listen(process.env.PORT || 8080, function() {
-    console.info(`App listening on ${this.address().port}`);
-  });
-}
+app.use('/routines', routineRouter);
 
-module.exports = app;
+
+
+app.listen(process.env.PORT || 8080, () => {
+    console.log(`Your app is listening on port ${process.env.PORT || 8080}`);
+  });

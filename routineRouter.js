@@ -4,15 +4,9 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
+const {Routines} = require('./models');
 
-const {RoutineSchema} = require('./routines');
+Routines.create('biceps', 'curls', 4, 12, 'Casey Van Dyke');
+Routines.create('shoulders', 'flies', 4, 12, 'Casey Van Dyke');
+Routines.create('chest', 'bench press', 4, 12, 'Casey Van Dyke');
 
-RoutineSchema.create(
-    'Biceps', 'Curls', 4, 12
-);
-RoutineSchema.create(
-    'Chest', 'Bench press', 4, 12
-);
-router.get('/', (req, res) => {
-    res.json(RoutineSchema.get());
-});
