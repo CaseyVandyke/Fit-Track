@@ -5,25 +5,42 @@ const router = express.Router();
 const Routine = require('../models/routine-model')
 
 //Get all routines from the database
-router.get('/routines', function(req,res){
-  res.send({type: 'GET'})
+router.get('/routines', (req,res, next) => {
+  Routine.find({})
+  .then((routine) => {
+    res.send(routine);
+  })
+  .catch(function(err){
+    console.error(err);
+    res.status(500).json({
+      error: 'something went wrong'
+    });
+  })
 });
 
 // Add a new routine in the databse
-router.post('/routines', function(req,res){
+router.post('/routines', (req,res, next) => {
   Routine.create(req.body)
-  .then(function(routine){
+  .then((routine) => {
     res.send(routine);
-  });
+  }).catch(next)
 });
 // Update a routine in the databse
-router.get('/routines/:id', function(req,res){
-  res.send({type: 'PUT'});
+router.put('/routines/:id', (req,res, next) => {
+  Routine.findByIdAndUpdate({_id: req.params.id}, req.body)
+  .then(function(){
+    Routine.findOne({_id: req.params.id}).then((routine) => {
+      res.send(routine);
+    });
+  });
 });
 
 //Delete a routine from the database
-router.delete('/routines/:id', function(req,res){
-  res.send({type: 'DELETE'});
+router.delete('/routines/:id', (req,res, next) => {
+  Routine.findByIdAndRemove({_id: req.params.id})
+  .then((routine) => {
+    res.send(routine);
+  });
 });
 
 module.exports = router;

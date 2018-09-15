@@ -6,16 +6,28 @@ const app = express();
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const { DATABASE_URL, PORT } = require('./config');
-const Routine = require('./models/routine-model')
+const User = require('./models/users-model');
+const Routine = require('./models/routine-model');
+const Diet = require('./models/diets-model');
 mongoose.Promise = global.Promise;
-const router = require('./routers/routineRouter')
-
+const { router: userRouter } = require('./routers/userRouter');
+const { router: routineRouter } = require('./routers/routineRouter');
+const { router: dietRouter } = require('./routers/dietRouter');
 
 app.use(bodyParser.json());
 
 // initialize routes
-app.use('/api', router);
+app.use('/api', userRouter);
+app.use('/api', routineRouter);
+app.use('/api', dietRouter);
 
+//error handling middleware
+app.use((err,req,res,next) => {
+    // console.log(err);
+    res.status(422).send({error: err.message});
+})
+
+let server;
 // this function connects to our database, then starts the server
 function runServer(databaseUrl, port = PORT) {
   return new Promise((resolve, reject) => {
