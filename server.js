@@ -14,6 +14,8 @@ const { router: userRouter } = require('./routers/userRouter');
 const { router: routineRouter } = require('./routers/routineRouter');
 const { router: dietRouter } = require('./routers/dietRouter');
 
+app.use(express.static('public'));
+
 app.use(bodyParser.json());
 
 // initialize routes

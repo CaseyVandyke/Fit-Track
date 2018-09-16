@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
-const authorSchema = mongoose.Schema({
+/* const authorSchema = mongoose.Schema({
     firstName: String,
     lastName: String,
     userName: {
@@ -12,7 +12,12 @@ const authorSchema = mongoose.Schema({
     }
 });
 
-const commentSchema = mongoose.Schema({ comment: String});
+
+
+const commentSchema = mongoose.Schema({
+    comment: String
+});
+*/
 
 const dietSchema = mongoose.Schema({
     title: String,
@@ -22,39 +27,48 @@ const dietSchema = mongoose.Schema({
         required: false
     },
     recipe: [String],
-    notes: String,
+    notes: String
 
-    //???
-    author: { type: mongoose.Schema.Types.ObjectId, ref: 'Author' },
-  comments: [commentSchema]
+    //??? catches comment from author?
 
+    /* author: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Author'
+    },
+    comments: [commentSchema]
+    */
+});
+/*
+dietSchema.pre('find', (next) => {
+    this.populate('author');
+    next();
 });
 
-const Author = mongoose.model('Author', authorSchema);
-const Diet = mongoose.model('diets', dietSchema);
-
-// ????
-
-Author
-  .create({
-    "firstName": "Michael",
-    "lastName": "Jones",
-    "userName": "micheal.jones"
-  })
-  .then(author => {
-    Diet
-      .create({
-        title: "another title",
-        calories: "200",
-        img: {
-            type: String,
-            required: false
-        },
-        recipe: "Tofu ravioli",
-        notes: "make sure to boil for 20 minutes until noodles are softened",
-        author: author._id
-      });
+dietSchema.pre('findOne', function(next) {
+    this.populate('author');
+    next();
   });
 
+dietSchema.virtual('authorName').get(function () {
+    return `${this.author.firstName} ${this.author.lastName}`.trim();
+});
 
-module.exports =  Diet, Author;
+dietSchema.methods.serialize = function () {
+    return {
+        id: this._id,
+        author: this.authorName,
+        calories: this.calories,
+        recipe: this.recipe,
+        notes: this.notes
+    };
+};
+
+
+const Author = mongoose.model('Author', authorSchema);
+*/
+const Diet = mongoose.model('diets', dietSchema);
+
+
+
+
+module.exports = { Diet };
