@@ -1,19 +1,23 @@
 'use strict';
 
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 mongoose.Promise = global.Promise;
 
 const UserSchema = mongoose.Schema({
-    password: {
-        type: String,
-        required: true
-    },
-    email: {
-        type: String,
-        required: true,
-        unique: true
-    }
+   local: {
+       username: String,
+       password: String
+   }
 });
+
+UserSchema.methods.generatHash = function(password) {
+    return bcrypt.hashSync(password, bcrypt.genSaltSync(9));
+}
+
+UserSchema.methods.validatePassword = function(password) {
+    return bcrypt.compareSync(password, this.local.password);
+}
 
 const User = mongoose.model('users', UserSchema);
 

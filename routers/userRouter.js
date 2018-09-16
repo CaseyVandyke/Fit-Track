@@ -16,9 +16,13 @@ router.get('/users', (req, res) =>{
     });
 });
 
-router.get('/logout', (req,res) => {
-
+router.get('/login', (req,res) => {
+    res.render('login');
 });
+
+router.get('/logout', (req, res) => {
+    res.send('logging out');
+})
 
 router.get('/google', (req, res) => {
     //handle with passport
@@ -31,4 +35,4 @@ router.post('/users', (req, res) => {
     User.findOne({email})
 });
 
-module.exports = router;
+module.exports = { router };

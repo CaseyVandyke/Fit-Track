@@ -43,4 +43,4 @@ router.delete('/routines/:id', (req,res, next) => {
   });
 });
 
-module.exports = router;
+module.exports = { router };

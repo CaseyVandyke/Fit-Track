@@ -8,15 +8,18 @@ const mongoose = require('mongoose');
 const { DATABASE_URL, PORT } = require('./config');
 const User = require('./models/users-model');
 const Routine = require('./models/routine-model');
+const Diet = require('./models/diets-model');
 mongoose.Promise = global.Promise;
 const { router: userRouter } = require('./routers/userRouter');
 const { router: routineRouter } = require('./routers/routineRouter');
+const { router: dietRouter } = require('./routers/dietRouter');
 
 app.use(bodyParser.json());
 
 // initialize routes
 app.use('/api', userRouter);
 app.use('/api', routineRouter);
+app.use('/api', dietRouter);
 
 //error handling middleware
 app.use((err,req,res,next) => {

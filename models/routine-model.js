@@ -3,6 +3,7 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
+const commentSchema = mongoose.Schema({ comment: String});
 //Creat routine Schema and model
 
 const routineSchema = mongoose.Schema({
@@ -23,7 +24,7 @@ const routineSchema = mongoose.Schema({
         required: [true, 'Repetiotions field is required']
     }
 
-})
+});
 
 const Routine = mongoose.model('routines', routineSchema);
 
