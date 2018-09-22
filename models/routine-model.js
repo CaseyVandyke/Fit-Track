@@ -1,6 +1,7 @@
 'use strict'
 
 const mongoose = require('mongoose');
+const User = require('./users-model');
 mongoose.Promise = global.Promise;
 
 const commentSchema = mongoose.Schema({ comment: String});
@@ -21,8 +22,12 @@ const routineSchema = mongoose.Schema({
     },
     reps: {
         type: Number,
-        required: [true, 'Repetiotions field is required']
-    }
+        required: [true, 'Repetitions field is required']
+    },
+    author: {
+        type: mongoose.Schema.Types.Mixed,
+        ref: 'User'
+    } 
 
 });
 

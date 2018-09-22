@@ -5,18 +5,22 @@ const bcrypt = require('bcrypt');
 mongoose.Promise = global.Promise;
 
 const UserSchema = mongoose.Schema({
-   local: {
-       username: String,
-       password: String
-   }
+username: String,
+password: String,
+avatar: String,
+firstName: String,
+lastName: String,
+email: String,
+isAdmin: {type: Boolean, default: false}
 });
 
-UserSchema.methods.generatHash = function(password) {
-    return bcrypt.hashSync(password, bcrypt.genSaltSync(9));
-}
 
 UserSchema.methods.validatePassword = function(password) {
-    return bcrypt.compareSync(password, this.local.password);
+    return bcrypt.compare(password, this.password);
+}
+
+UserSchema.statics.hashPassword = function (password) {
+    return bcrypt.hash(password, 10);
 }
 
 const User = mongoose.model('users', UserSchema);

@@ -3,7 +3,24 @@
 const express = require('express');
 const router = express.Router();
 const Routine = require('../models/routine-model')
+const jwt = require('jsonwebtoken');
+const User = require('../models/users-model');
 
+
+router.get('/routines/:id', (req, res, next) => {
+  Routine.find({
+      'author': req.params.id
+  }, (err, routine) => {
+      if (err) {
+          console.error(err)
+          res.status(500).json({
+              error: 'something went wrong'
+          });
+      } else {
+          res.send(routine)
+      }
+  })
+});
 //Get all routines from the database
 router.get('/routines', (req,res, next) => {
   Routine.find({})

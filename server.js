@@ -24,7 +24,7 @@ app.use('/api', routineRouter);
 app.use('/api', dietRouter);
 
 //error handling middleware
-app.use((err,req,res,next) => {
+app.use('*', (err,req,res,next) => {
     // console.log(err);
     res.status(422).send({error: err.message});
 })
@@ -33,7 +33,7 @@ let server;
 // this function connects to our database, then starts the server
 function runServer(databaseUrl, port = PORT) {
   return new Promise((resolve, reject) => {
-      mongoose.connect(databaseUrl, err => {
+      mongoose.connect(databaseUrl, { useNewUrlParser: true }, err => {
           if (err) {
               return reject(err);
           }

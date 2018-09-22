@@ -1,7 +1,9 @@
 'use strict';
 
 const mongoose = require('mongoose');
+const User = require('./users-model');
 mongoose.Promise = global.Promise;
+
 
 /* const authorSchema = mongoose.Schema({
     firstName: String,
@@ -12,12 +14,12 @@ mongoose.Promise = global.Promise;
     }
 });
 
-
+*/
 
 const commentSchema = mongoose.Schema({
-    comment: String
+    content: 'string'
 });
-*/
+
 
 const dietSchema = mongoose.Schema({
     title: String,
@@ -27,16 +29,12 @@ const dietSchema = mongoose.Schema({
         required: false
     },
     recipe: [String],
-    notes: String
-
-    //??? catches comment from author?
-
-    /* author: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Author'
-    },
-    comments: [commentSchema]
-    */
+    notes: String,
+    author: {
+        type: mongoose.Schema.Types.Mixed,
+        ref: 'User'
+    }
+    
 });
 /*
 dietSchema.pre('find', (next) => {
@@ -71,4 +69,4 @@ const Diet = mongoose.model('diets', dietSchema);
 
 
 
-module.exports = { Diet };
+module.exports =  Diet;
