@@ -32,7 +32,7 @@ router.get('/diets', (req, res, next) => {
             });
         });
 });
-
+/*
 router.post('/diets', verifyToken, (req, res) => {
     jwt.verify(req.token, 'secretkey', (err, authData) => {
         if (err) {
@@ -64,7 +64,7 @@ function verifyToken(req, res, next) {
         res.json(403)
     }
 }
-
+*/
 router.post('/diets', (req, res, next) => {
     const payload = {
         title: req.body.title,

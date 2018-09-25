@@ -5,25 +5,10 @@ const User = require('./users-model');
 mongoose.Promise = global.Promise;
 
 
-/* const authorSchema = mongoose.Schema({
-    firstName: String,
-    lastName: String,
-    userName: {
-        type: String,
-        unique: true
-    }
-});
-
-*/
-
-const commentSchema = mongoose.Schema({
-    content: 'string'
-});
-
 
 const dietSchema = mongoose.Schema({
     title: String,
-    calories: Number,
+    calories: String,
     img: {
         type: String,
         required: false
@@ -32,38 +17,11 @@ const dietSchema = mongoose.Schema({
     notes: String,
     author: {
         type: mongoose.Schema.Types.Mixed,
-        ref: 'User'
+        ref: 'users'
     }
     
 });
-/*
-dietSchema.pre('find', (next) => {
-    this.populate('author');
-    next();
-});
 
-dietSchema.pre('findOne', function(next) {
-    this.populate('author');
-    next();
-  });
-
-dietSchema.virtual('authorName').get(function () {
-    return `${this.author.firstName} ${this.author.lastName}`.trim();
-});
-
-dietSchema.methods.serialize = function () {
-    return {
-        id: this._id,
-        author: this.authorName,
-        calories: this.calories,
-        recipe: this.recipe,
-        notes: this.notes
-    };
-};
-
-
-const Author = mongoose.model('Author', authorSchema);
-*/
 const Diet = mongoose.model('diets', dietSchema);
 
 

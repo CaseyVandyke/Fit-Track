@@ -26,7 +26,7 @@ const routineSchema = mongoose.Schema({
     },
     author: {
         type: mongoose.Schema.Types.Mixed,
-        ref: 'User'
+        ref: 'users'
     } 
 
 });
