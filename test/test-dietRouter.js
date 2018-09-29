@@ -47,7 +47,7 @@ function seedDietData() {
     for (let i = 1; i <= 10; i++) {
         seedData.push({
             title: faker.lorem.text(),
-            calories: faker.lorem.text(),
+            calories: faker.random.number(),
             img: faker.image.image(),
             recipe: faker.lorem.text(),
             notes: faker.lorem.text(),
@@ -151,7 +151,7 @@ describe('Diet API resource', function () {
 
             const newDiet = {
                 title: faker.lorem.words(),
-                calories: faker.lorem.word(),
+                calories: faker.random.number(),
                 img: faker.image.food(),
                 recipe: faker.lorem.word(),
                 notes: faker.lorem.words(),
@@ -186,7 +186,7 @@ describe('Diet API resource', function () {
         it('should update fields sent', function () {
             const updateDiet = {
                 title: faker.lorem.words(),
-                calories: faker.lorem.word(),
+                calories: faker.random.number(),
                 img: faker.image.food(),
                 recipe: faker.lorem.word(),
                 notes: faker.lorem.words(),

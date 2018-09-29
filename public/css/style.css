@@ -1,0 +1,176 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #2A2929;
+    font-family: Roboto, sans-serif;
+}
+
+#landing-header {
+    padding: 20px;
+    text-align: center;
+}
+
+#wrapper {
+    width: 840px;
+    margin: 0 auto;
+}
+
+.app-title {
+    color: #fff;
+    font-weight: 200;
+    font-size: 42px;
+    margin: 30px 0;
+}
+
+#landing-content {
+    display: flex;
+    width: 800px;
+    margin: 0 auto;
+}
+
+#landing-content > div {
+    flex: 1;
+}
+
+.text-style {
+    color: #fff;
+    margin-top: 20px;
+    line-height: 25px;
+}
+
+.profile-icon {
+    color: #FF4F26;
+    border: 1px solid #FF4F26;
+}
+
+.routine-icon {
+    color: #08FF83;
+    border: 1px solid #08FF83
+}
+
+.diet-icon {
+    color: #FFDB07;
+    border: 1px solid #FFDB07;
+}
+
+.profile-icon, .routine-icon, .diet-icon {
+    width: 20%;
+    border-radius: 3px;
+    margin: 10px;
+    padding: 10px;
+}
+
+#login-btn, #signup-btn {
+    margin: 40px 10px;
+    width: 150px;
+    padding: 5px;
+    border-radius: 3px;
+    font-size: 17px;
+    -webkit-appearance: none;
+}
+
+#signup-btn {
+    border: none;
+    background-color: #08FF83;
+}
+
+#login-btn {
+    border: 1px solid #08FF83;
+    background-color: #2A2929;
+    color: #08FF83;
+}
+
+li {
+    list-style: none;
+    display: inline;
+}
+
+ul a {
+    font-weight: 300;
+    font-size: 20px;
+    color: #fff;
+    text-decoration: none;
+    padding: 20px;
+    border-radius: 2px;
+}
+
+.yellow-box:hover {
+    background-color: #FFDB07;
+    color: #262626;
+}
+
+.yellow-box:active {
+    background-color: #FFDB07;
+}
+
+.green-box:hover {
+    background-color: #08FF83;
+    color: #262626
+}
+
+.green-box:active {
+    background-color: #08FF83;
+}
+
+.red-box:hover {
+    background-color: #FF4F26;
+    color: #262626
+}
+
+.red-box:active {
+    background-color: #FF4F26;
+}
+
+/* Login Sectiion */
+
+#login-wrapper {
+    width: 300px;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.username-auth, .password-auth {
+    display: block;
+    margin: 0 auto;
+    width: 200px;
+    padding: 5px;
+    border-radius: 3px;
+    font-size: 17px;
+    -webkit-appearance: none;
+    border: none;
+    border: 1px solid #08FF83;
+    background-color: #2A2929;
+    color: #08FF83;
+}
+
+.username-auth {
+    margin-bottom: 20px;
+}
+
+.profile-login, .profile-signup {
+    border: none;
+    background-color: #08FF83;
+    width: 200px;
+    padding: 5px;
+    border-radius: 3px;
+    font-size: 17px;
+    -webkit-appearance: none;
+}
+
+.profile-login {
+    background-color: #08FF83;
+}
+
+.profile-signup {
+    background-color: #FFDB07;
+}
+
+.btn-space {
+    color: #fff;
+    margin: 10px;
+}
+

@@ -6,39 +6,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="../css/style.css">
     <title>Fit Track</title>
 </head>
 
-<body>
-    <nav class="nav-container">
-        <div class="shift">
-            <ul>
-                <li>
-                    <a class="yellow-box profile" href="index.html">Profile</a>
-                </li>
-                <li>
-                    <a class="green-box routines" href="#">Routines</a>
-                </li>
-                <li>
-                    <a class="red-box" href="#">Progress</a>
-                </li>
-                <li>
-                    <a class="yellow-box diets" href="#">Diet Plans</a>
-                </li>
-                
-            </ul>
+<main>
+    <section id="landing-header">
+        <div id="wrapper">
+            <h1 class="app-title">Fit Track</h1>
+            <button id="signup-btn">Get started</button>
+
+            <button id="login-btn">Login</button>
+            <section id="landing-content">
+                <div class="profile-icon">
+                    <li><i class="far fa-user fa-2x"></i></li>
+                    <div class="text-style">
+                        <p>Create a profile to customize and maintain growth.</p>
+                    </div>
+                </div>
+                <div class="routine-icon">
+                    <li><i class="fas fa-dumbbell fa-2x"></i></li>
+                    <div class="text-style">
+                        <p>Create custom workout routines to avoid plateau.</p>
+                    </div>
+                </div>
+                <div class="diet-icon">
+                    <li><i class="fas fa-utensils fa-2x"></i></li>
+                    <div class="text-style">
+                        <p>Create a personalized diet for health and wellness.</p>
+                    </div>
+                </div>
+            </section>
         </div>
-    </nav>
+    </section>
 
-    <form class="tab-container" action="">
-        <div class="results"></div>
-    </form>
+    <section id="login-wrapper">
+        <form action="#" id="login-form">
+            <div id="my-login"></div>
+            <input type="text" value="Username" class="username-auth">
+            <input type="text" value="Password" class="password-auth">
+            <br/>
+            <button class="profile-login">Login</button>
+            <p class="btn-space">Or</p>
+            <button class="profile-signup">Sign up</button>
+        </form>
+    </section>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-        crossorigin="anonymous"></script>
-    <script src="content.js"></script>
-    <script src="script.js"></script>
+
+
+</main>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+<script src="../javascript/index.js"></script>
 </body>
 
 </html>

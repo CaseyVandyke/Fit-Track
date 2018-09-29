@@ -8,7 +8,7 @@ mongoose.Promise = global.Promise;
 
 const dietSchema = mongoose.Schema({
     title: String,
-    calories: String,
+    calories: Number,
     img: {
         type: String,
         required: false

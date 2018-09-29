@@ -5,14 +5,23 @@ const bcrypt = require('bcrypt');
 mongoose.Promise = global.Promise;
 
 const UserSchema = mongoose.Schema({
-username: String,
-password: String,
-avatar: String,
-firstName: String,
-lastName: String,
-email: String,
-isAdmin: {type: Boolean, default: false}
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    password: {
+        type: String,
+        required: true
+    }
 });
+
+UserSchema.methods.serialize = function() {
+    return {
+        email: this.email || ''
+    };
+};
+
 
 
 UserSchema.methods.validatePassword = function(password) {
