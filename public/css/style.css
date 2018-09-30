@@ -9,6 +9,15 @@ body {
     font-family: Roboto, sans-serif;
 }
 
+#login-btn, #signup-btn, .profile-login, .profile-signup {
+    cursor: pointer;
+}
+
+#login-btn:hover {
+    background-color: #08FF83;
+    color: #2A2929;
+}
+
 #landing-header {
     padding: 20px;
     text-align: center;
@@ -131,6 +140,7 @@ ul a {
     width: 300px;
     text-align: center;
     margin: 0 auto;
+    display: none;
 }
 
 .username-auth, .password-auth {

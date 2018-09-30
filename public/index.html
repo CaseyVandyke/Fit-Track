@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
         crossorigin="anonymous">
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
     <title>Fit Track</title>
 </head>
 
@@ -16,9 +16,11 @@
     <section id="landing-header">
         <div id="wrapper">
             <h1 class="app-title">Fit Track</h1>
+            <form action="#" class="login-form">
             <button id="signup-btn">Get started</button>
-
             <button id="login-btn">Login</button>
+                <div class="login-results"></div>
+            </form>
             <section id="landing-content">
                 <div class="profile-icon">
                     <li><i class="far fa-user fa-2x"></i></li>
@@ -42,25 +44,11 @@
         </div>
     </section>
 
-    <section id="login-wrapper">
-        <form action="#" id="login-form">
-            <div id="my-login"></div>
-            <input type="text" value="Username" class="username-auth">
-            <input type="text" value="Password" class="password-auth">
-            <br/>
-            <button class="profile-login">Login</button>
-            <p class="btn-space">Or</p>
-            <button class="profile-signup">Sign up</button>
-        </form>
-    </section>
-
-
-
 </main>
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
     crossorigin="anonymous"></script>
-<script src="../javascript/index.js"></script>
+<script src"/javascript/client.js"></script>
 </body>
 
 </html>

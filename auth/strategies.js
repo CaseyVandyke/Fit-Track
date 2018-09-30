@@ -8,9 +8,9 @@ const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
 const User = require('../../models/users-model');
 const { JWT_SECRET } = require('../config');
 
-const localStrategy = new LocalStrategy((username, password, callback) => {
+const localStrategy = new LocalStrategy((username, password, passportVerify) => {
   let user;
-  User.findOne({ username: username })
+  User.findOne({ email: username })
     .then(_user => {
       user = _user;
       if (!user) {
@@ -30,13 +30,13 @@ const localStrategy = new LocalStrategy((username, password, callback) => {
           message: 'Incorrect username or password'
         });
       }
-      return callback(null, user);
+      return passportVerify(null, user);
     })
     .catch(err => {
       if (err.reason === 'LoginError') {
-        return callback(null, false, err);
+        return passportVerify(null, false, err);
       }
-      return callback(err, false);
+      return passportVerify(err, false);
     });
 });
 
@@ -48,8 +48,8 @@ const jwtStrategy = new JwtStrategy(
     // Only allow HS256 tokens - the same as the ones we issue
     algorithms: ['HS256']
   },
-  (payload, done) => {
-    done(null, payload.user);
+  (token, done) => {
+    done(null, token.user);
   }
 );
 
