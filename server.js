@@ -1,10 +1,11 @@
 'use strict';
-
+require("dotenv").config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const morgan = require('morgan');
 const mongoose = require('mongoose');
+const passport = require('passport');
 const { DATABASE_URL, PORT } = require('./config');
 const User = require('./models/users-model');
 const Routine = require('./models/routine-model');
@@ -13,16 +14,30 @@ mongoose.Promise = global.Promise;
 const { router: userRouter } = require('./routers/userRouter');
 const { router: routineRouter } = require('./routers/routineRouter');
 const { router: dietRouter } = require('./routers/dietRouter');
-
+const { router: authRouter, localStrategy, jwtStrategy } = require('./auth/authRouter');
 app.use(express.static('public'));
 
 app.use(bodyParser.json());
 
 // initialize routes
+passport.use(localStrategy);
+passport.use(jwtStrategy);
+
 app.use('/api', userRouter);
 app.use('/api', routineRouter);
 app.use('/api', dietRouter);
+app.use('/api/auth', authRouter);
 
+const jwtAuth = passport.authenticate('jwt', { session: false });
+
+// A protected endpoint which needs a valid JWT to access it
+app.get('/api/protected', jwtAuth, (req, res) => {
+  console.log(req);
+  return res.json({
+    username: req.user.username
+  });
+
+});
 //error handling middleware
 app.use('*', (err,req,res,next) => {
     // console.log(err);
