@@ -14,7 +14,7 @@ mongoose.Promise = global.Promise;
 const { router: userRouter } = require('./routers/userRouter');
 const { router: routineRouter } = require('./routers/routineRouter');
 const { router: dietRouter } = require('./routers/dietRouter');
-const { router: authRouter, localStrategy, jwtStrategy } = require('./auth/authRouter');
+const { router: router, localStrategy, jwtStrategy } = require('./auth');
 app.use(express.static('public'));
 
 app.use(bodyParser.json());
@@ -26,7 +26,7 @@ passport.use(jwtStrategy);
 app.use('/api', userRouter);
 app.use('/api', routineRouter);
 app.use('/api', dietRouter);
-app.use('/api/auth', authRouter);
+app.use('/api/auth', router);
 
 const jwtAuth = passport.authenticate('jwt', { session: false });
 

@@ -21,14 +21,14 @@ function createUser() {
     $('#signup-btn').submit((e) => {
         e.preventDefault();
         
-        const email = $('.js-username-auth').val();
+        const username = $('.js-username-auth').val();
         const password = $('.js-password-auth').val();
 
         $.ajax({
             type: 'post',
             url: '/api/users',
             data: {
-                email: email,
+                username: username,
                 password: password
             },
              success: (data) => {
@@ -46,3 +46,20 @@ function createUser() {
 
     });
 };
+
+const userLogin = {username: username, password: password};
+$.ajax({
+            method: 'POST',
+            url: '/auth/login',
+            data: JSON.stringify(userLogin),
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function(data) {
+              let jwt = data.authToken;
+                sessionStorage.setItem('Bearer', jwt);
+                // Load the home page
+            },
+            error: function(request, error) {
+            
+            }
+        });

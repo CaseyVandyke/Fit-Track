@@ -23,11 +23,11 @@ router.get('/users', (req, res, next) => {
 
 // @CREATE NEW USER
 router.post('/users', (req, res) => {
-    const email = req.body.email;
+    const username = req.body.username;
     const pass = req.body.password;
 
     User
-        .findOne({ email })
+        .findOne({ username })
         .then(user => {
             if (user) {
                 //there is an existing user with the same username
@@ -35,7 +35,7 @@ router.post('/users', (req, res) => {
                     code: 422,
                     reason: 'ValidationError',
                     message: 'Username already taken',
-                    location: 'email'
+                    location: 'username'
                 });
             }
             // If there is no existing user, hash the password
@@ -43,7 +43,7 @@ router.post('/users', (req, res) => {
         })
         .then(hash => {
             return User.create({
-                email,
+                username,
                 password: hash
             });
         })
