@@ -150,7 +150,6 @@ router.delete('/users/:id', (req, res) => {
         });
 });
 
-
 module.exports = {
     router
 };

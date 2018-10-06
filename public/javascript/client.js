@@ -1,3 +1,5 @@
+// Landing Page
+
 $("#signup-btn").on('click', function (e) {
     e.preventDefault();
     $(".login-results").html(`<section id="login-wrapper">
@@ -20,18 +22,18 @@ $("#signup-btn").on('click', function (e) {
 function createUser() {
     $('#signup-btn').submit((e) => {
         e.preventDefault();
-        
+
         const username = $('.js-username-auth').val();
         const password = $('.js-password-auth').val();
 
         $.ajax({
-            type: 'post',
+            type: 'POST',
             url: '/api/users',
             data: {
                 username: username,
                 password: password
             },
-             success: (data) => {
+            success: (data) => {
                 if (data) {
                     $('.js-username-auth').val('');
                     $('.js-password-auth').val('');
@@ -47,19 +49,26 @@ function createUser() {
     });
 };
 
-const userLogin = {username: username, password: password};
+
+const userLogin = {
+    username: username,
+    password: password
+};
 $.ajax({
-            method: 'POST',
-            url: '/auth/login',
-            data: JSON.stringify(userLogin),
-            dataType: 'json',
-            contentType: 'application/json',
-            success: function(data) {
-              let jwt = data.authToken;
-                sessionStorage.setItem('Bearer', jwt);
-                // Load the home page
-            },
-            error: function(request, error) {
-            
-            }
-        });
+    method: 'POST',
+    url: '/auth/login',
+    data: JSON.stringify(userLogin),
+    dataType: 'json',
+    contentType: 'application/json',
+    success: function (data) {
+        let jwt = data.authToken;
+        sessionStorage.setItem('Bearer', jwt);
+        const pageName = profile + ".html";
+        window.open(pageName);
+    },
+    error: (error) => {
+        if (error) {
+            $('#login-error').html(`<p>You have entered a wrong username or password try again`);
+        }
+    }
+});
