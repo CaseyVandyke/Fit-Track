@@ -16,7 +16,9 @@ const { router: routineRouter } = require('./routers/routineRouter');
 const { router: dietRouter } = require('./routers/dietRouter');
 const { router: router, localStrategy, jwtStrategy } = require('./auth');
 app.use(express.static('public'));
-
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 app.use(bodyParser.json());
 
 // initialize routes

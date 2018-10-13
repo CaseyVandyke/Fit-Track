@@ -4,12 +4,14 @@ const express = require('express');
 const router = express.Router();
 const Routine = require('../models/routine-model')
 const jwt = require('jsonwebtoken');
+const passport = require('passport');
 const User = require('../models/users-model');
 
+const jwtAuth = passport.authenticate('jwt', { session: false });
 
-router.get('/routines/:id', (req, res, next) => {
+router.get('/routines/:id', jwtAuth, (req, res, next) => {
   Routine.find({
-      'author': req.params.id
+      '_id': req.params.id
   }, (err, routine) => {
       if (err) {
           console.error(err)
@@ -22,8 +24,9 @@ router.get('/routines/:id', (req, res, next) => {
   })
 });
 //Get all routines from the database
-router.get('/routines', (req,res, next) => {
-  Routine.find({})
+router.get('/routines', jwtAuth, (req,res, next) => {
+  console.log(req.user.username);
+  Routine.find({"author": req.user.username})
   .then((routine) => {
     res.send(routine);
   })
@@ -36,14 +39,14 @@ router.get('/routines', (req,res, next) => {
 });
 
 // Add a new routine in the databse
-router.post('/routines', (req,res, next) => {
+router.post('/routines', jwtAuth, (req,res, next) => {
   Routine.create(req.body)
   .then((routine) => {
     res.send(routine);
   }).catch(next)
 });
 // Update a routine in the databse
-router.put('/routines/:id', (req,res, next) => {
+router.put('/routines/:id', jwtAuth, (req,res, next) => {
   Routine.findByIdAndUpdate({_id: req.params.id}, req.body)
   .then(function(){
     Routine.findOne({_id: req.params.id}).then((routine) => {
@@ -53,7 +56,7 @@ router.put('/routines/:id', (req,res, next) => {
 });
 
 //Delete a routine from the database
-router.delete('/routines/:id', (req,res, next) => {
+router.delete('/routines/:id', jwtAuth, (req,res, next) => {
   Routine.findByIdAndRemove({_id: req.params.id})
   .then((routine) => {
     res.send(routine);

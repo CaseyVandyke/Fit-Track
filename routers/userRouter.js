@@ -6,6 +6,22 @@ const router = express.Router();
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 
+const jwtAuth = passport.authenticate('jwt', { session: false });
+
+router.get('/user', (req, res, next) =>{
+    console.log(req.user);
+    User.find({"username" : req.user.username})
+    .then((users) => {
+            res.json(users);
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).json({
+                error: 'something went wrong'
+            });
+        });
+});
+
 // Get all users
 router.get('/users', (req, res, next) => {
     User
@@ -22,14 +38,17 @@ router.get('/users', (req, res, next) => {
 });
 
 // @CREATE NEW USER
-router.post('/users', (req, res) => {
+router.post('/users', jwtAuth, (req, res) => {
     const username = req.body.username;
     const pass = req.body.password;
+    const firstName = req.body.firstName;
+    const lastName = req.body.lastName;
+
 
     User
         .findOne({ username })
-        .then(user => {
-            if (user) {
+        .then(_user => {
+            if (_user) {
                 //there is an existing user with the same username
                 return Promise.reject({
                     code: 422,
@@ -44,7 +63,9 @@ router.post('/users', (req, res) => {
         .then(hash => {
             return User.create({
                 username,
-                password: hash
+                password: hash,
+                firstName: firstName,
+                lastName: lastName
             });
         })
         .then(newUser => {
@@ -54,34 +75,14 @@ router.post('/users', (req, res) => {
             // Forward validation errors on to the client, otherwise give a 500
             // error because something unexpected has happened
             if (err.reason === 'ValidationError') {
+               
                 return res.status(err.code).json(err);
             }
             res.status(500).json({ code: 500, message: 'Internal server error' });
         });
 });
 
-router.post('/users/post', verifyToken, (req, res) => {
-    jwt.verify(req.token, 'secretkey', (err, authData) => {
-        if (err) {
-            res.sendStatus(403);
-        } else {
-            res.json({
-                message: 'Post created',
-                authData
-            })
-        }
-    });
-});
 
-router.post('/users/login', (req, res) => {
-    jwt.sign({
-        User
-    }, 'secretkey', (err, token) => {
-        res.json({
-            token
-        });
-    });
-})
 
 //Update user
 router.put('/users/:id', (req, res) => {
@@ -94,7 +95,7 @@ router.put('/users/:id', (req, res) => {
 
     const updated = {};
     const updateableFields = [
-        'email',
+        'username',
         'password'
     ];
     updateableFields.forEach((field) => {
@@ -116,27 +117,6 @@ router.put('/users/:id', (req, res) => {
             });
         });
 });
-
-// Format of token
-
-// Verify token
-function verifyToken(req, res, next) {
-    // Get auth header value
-    const bearerHeader = req.headers['authorization'];
-    // Check if bearer is undefined
-    if (typeof bearerHeader !== 'undefined') {
-        // Split at the space
-        const bearer = bearerHeader.split(' ')
-        // Get token from array
-        const bearerToken = bearer[1];
-        // Set the token
-        req.token = bearerToken;
-        // Next middleware
-        next();
-    } else {
-        res.json(403)
-    }
-}
 
 //delete user by id
 router.delete('/users/:id', (req, res) => {

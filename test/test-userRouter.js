@@ -10,8 +10,15 @@ const jwt = require('jsonwebtoken');
 const passport = require('passport');
 
 const User = require('../models/users-model');
-const { app, runServer, closeServer, } = require('../server');
-const { TEST_DATABASE_URL, JWT_SECRET } = require('../config');
+const {
+    app,
+    runServer,
+    closeServer,
+} = require('../server');
+const {
+    TEST_DATABASE_URL,
+    JWT_SECRET
+} = require('../config');
 
 
 chai.use(chaiHttp);
@@ -32,7 +39,7 @@ function seedFakeUserDb() {
 
 function generateUserData() {
     return {
-        email: faker.internet.email(),
+        username: faker.internet.userName(),
         password: faker.internet.password()
     }
 }
@@ -43,34 +50,36 @@ function tearDownDb() {
 }
 
 
-describe('User api routes', function() {
-    before(function() {
+describe('User api routes', function () {
+    before(function () {
         return runServer(TEST_DATABASE_URL);
     });
 
-    beforeEach(function() {
+    beforeEach(function () {
         return seedFakeUserDb();
     });
 
-    afterEach(function() {
+    afterEach(function () {
         return tearDownDb();
     });
 
-    after(function() {
+    after(function () {
         return closeServer();
     });
 
     //works
-    describe('GET all users in database', function() {
-        it('should get all users in the database', function() {
+    describe('GET all users in database', function () {
+        it('should get all users in the database', function () {
             let user = generateUserData();
-            var token = jwt.sign({ user }, JWT_SECRET);
+            var token = jwt.sign({
+                user
+            }, JWT_SECRET);
 
             return chai.request(app)
                 .get('/api/users')
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json')
-                .set('Cookie', `Token=${token}`)
+                .set('Authorization', `Bearer ${token}`)
                 .then(res => {
                     res.should.have.status(200);
                     res.should.be.json;
@@ -78,72 +87,75 @@ describe('User api routes', function() {
         });
     });
 
-            //works
-    describe('POST request for /users', function() {
-        it('should create a new user in the database', function() {
+    //works
+    describe('POST request for /users', function () {
+        it('should create a new user in the database', function () {
             let newUser = generateUserData();
             return chai.request(app)
                 .post('/api/users')
                 .send(newUser)
-                .then(function(res) {
+                .then(function (res) {
                     res.should.have.status(201);
                     res.should.be.json;
                 });
         });
     });
+
+//works
+describe('PUT request for /users/:id', function () {
+    it('should update a user in the database with a specific id', function () {
+        let user = generateUserData();
+        var token = jwt.sign({
+            user
+        }, JWT_SECRET);
+
+        let updateData = {
+            username: faker.internet.userName()
+        }
+
+        User
+            .findOne()
+            .then(user => {
+                return chai.request(app)
+                    .put(`/users/${user.id}`)
+                    .set('Authorization', `Bearer ${token}`)
+                    .send(updateData);
+            })
+            .then(res => {
+                res.should.have.status(204);
+            })
+            .then(updatedUser => {
+                updatedUser.should.deep.equal(updateData);
+            });
+
+    });
 });
 
-    //works
-    describe('PUT request for /users/:id', function() {
-        it('should update a user in the database with a specific id', function() {
-            let user = generateUserData();
-            var token = jwt.sign({ user }, JWT_SECRET);
+//works
+describe('DELETE request for /users/:id', function () {
+    it('should delete a user from the database', function () {
+        let deletedUser;
+        let user = generateUserData();
+        var token = jwt.sign({
+            user
+        }, JWT_SECRET);
 
-            let updateData = {
-                email: faker.internet.email()
-            }
+        User
+            .findOne()
+            .then(user => {
+                deletedUser = user._id;
+                return chai.request(app)
+                    .delete(`/users/${deletedUser}`)
+                    .set('Authorization', `Bearer ${token}`)
+            })
+            .then(res => {
+                res.should.have.status(204);
+                return User.findById(deletedUser);
+            })
+            .then(deleted => {
+                should.not.exist(deleted);
+            });
 
-            User
-                .findOne()
-                .then(user => {
-                    return chai.request(app)
-                        .put(`/users/${user.id}`)
-                        .set('Authorization', `Bearer ${token}`)
-                        .send(updateData);
-                })
-                .then(res => {
-                    res.should.have.status(204);
-                })
-                .then(updatedUser => {
-                    updatedUser.should.deep.equal(updateData);
-                });
-
-        });
     });
-
-    //works
-    describe('DELETE request for /users/:id', function() {
-        it('should delete a user from the database', function() {
-            let deletedUser;
-            let user = generateUserData();
-            var token = jwt.sign({ user }, JWT_SECRET);
-
-            User
-                .findOne()
-                .then(user => {
-                    deletedUser = user._id;
-                    return chai.request(app)
-                        .delete(`/users/${deletedUser}`)
-                        .set('Authorization', `Bearer ${token}`)
-                })
-                .then(res => {
-                    res.should.have.status(204);
-                    return User.findById(deletedUser);
-                })
-                .then(deleted => {
-                    should.not.exist(deleted);
-                });
-
-        });
-    });
-
+});
+});

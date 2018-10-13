@@ -15,6 +15,7 @@ const createAuthToken = function(user) {
   });
 };
 
+//User Login
 const localAuth = passport.authenticate('local', {session: false});
 router.use(bodyParser.json());
 // The user provides a username and password to login

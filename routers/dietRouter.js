@@ -5,10 +5,11 @@ const Diet = require('../models/diets-model');
 const User = require('../models/users-model');
 const jwt = require('jsonwebtoken');
 
+const jwtAuth = passport.authenticate('jwt', { session: false });
 
-router.get('/diets/:id', (req, res, next) => {
+router.get('/diets/:id', jwtAuth, (req, res, next) => {
     Diet.find({
-        'author': req.params.id
+        '_id': req.params.id
     }, (err, diet) => {
         if (err) {
             console.error(err)
@@ -21,8 +22,8 @@ router.get('/diets/:id', (req, res, next) => {
     })
 });
 
-router.get('/diets', (req, res, next) => {
-    Diet.find({})
+router.get('/diets', jwtAuth, (req, res, next) => {
+    Diet.find({"author": req.user.username})
         .then((diet) => {
             res.send(diet);
         }).catch(function (err) {
@@ -32,40 +33,8 @@ router.get('/diets', (req, res, next) => {
             });
         });
 });
-/*
-router.post('/diets', verifyToken, (req, res) => {
-    jwt.verify(req.token, 'secretkey', (err, authData) => {
-        if (err) {
-            res.sendStatus(403);
-        } else {
-            res.json({
-                message: 'Post created',
-                authData
-            })
-        }
-    });
-});
 
-// Verify token
-function verifyToken(req, res, next) {
-    // Get auth header value
-    const bearerHeader = req.headers['authorization'];
-    // Check if bearer is undefined
-    if (typeof bearerHeader !== 'undefined') {
-        // Split at the space
-        const bearer = bearerHeader.split(' ')
-        // Get token from array
-        const bearerToken = bearer[1];
-        // Set the token
-        req.token = bearerToken;
-        // Next middleware
-        next();
-    } else {
-        res.json(403)
-    }
-}
-*/
-router.post('/diets', (req, res, next) => {
+router.post('/diets', jwtAuth, (req, res, next) => {
     const payload = {
         title: req.body.title,
         calories: req.body.calories,
@@ -84,7 +53,7 @@ router.post('/diets', (req, res, next) => {
         });
 });
 
-router.put('/diets/:id', (req, res, next) => {
+router.put('/diets/:id', jwtAuth, (req, res, next) => {
     Diet.findByIdAndUpdate({
             _id: req.params.id
         }, req.body)
@@ -98,7 +67,7 @@ router.put('/diets/:id', (req, res, next) => {
 });
 
 //Delete a routine from the database
-router.delete('/diets/:id', (req, res, next) => {
+router.delete('/diets/:id', jwtAuth, (req, res, next) => {
     Diet.findByIdAndRemove({
             _id: req.params.id
         })

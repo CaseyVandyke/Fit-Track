@@ -17,35 +17,36 @@ body {
 
 }
 
-#login-btn {
-    width: 50px;
-    padding: 5px;
-    border-radius: 3px;
-    font-size: 15px;
-    -webkit-appearance: none;
-    border: none;
-    background-color: #08FF83;
-}
-
 #login-btn, #signup-btn, .profile-login, .profile-signup {
     cursor: pointer;
 }
 
-#signup-btn {
-    margin: 40px 10px;
-    width: 200px;
+#signup-btn, #login-btn {
+    margin: 10px;
     padding: 5px;
     border-radius: 3px;
     font-size: 17px;
-    -webkit-appearance: none;
-    border: 2px solid #08FF83;
     color: #08FF83;
-    background-color: #2A2929;
+    background-color: #2A2929; 
+    border: 3px solid #08FF83;
+    -webkit-appearance: none;
     opacity: 0.8;
 }
 
-#login-btn:hover {
-    opacity: 0.8;
+#signup-btn:hover {
+
+}
+
+#signup-btn {
+    width: 400px;
+    font-size: 30px;
+    margin-top: 80px;
+    padding: 20px;
+    text-transform: uppercase;
+}
+
+#login-btn {
+    width: 100px;
 }
 
 #landing-header {
@@ -55,56 +56,22 @@ body {
 
 #wrapper {
     width: 840px;
-    margin: 0 auto;
+    margin: 10px auto 0;
 }
 
 .app-title {
-    color: #fff;
-    font-weight: 300;
-    font-size: 50px;
-    margin-top: 50px;
+    color: #08FF83;
+    font-weight: 500;
+    font-size: 85px;
+    margin-top: 20px;
+    text-transform: uppercase;
 }
 
-#landing-content {
-    width: 800px;
-    margin: 0 auto;
-    display: flex;
-}
-
-#landing-content > div {
-   
-}
 
 .text-style {
     color: #fff;
     margin-top: 20px;
     line-height: 25px;
-}
-
-.profile-icon, .routine-icon, .diet-icon {
-    background: #2A2929;
-    border-radius: 3px;
-    margin: 10px;
-    padding: 10px;
-    opacity: 0.8;
-    color: #08FF83;
-    border: 2px solid #08FF83;
-}
-
-
-
-li {
-    list-style: none;
-    display: inline;
-}
-
-ul a {
-    font-weight: 300;
-    font-size: 20px;
-    color: #fff;
-    text-decoration: none;
-    padding: 20px;
-    border-radius: 2px;
 }
 
 /* Login Sectiion */
@@ -166,3 +133,7 @@ ul a {
     margin: 10px;
 }
 
+.greeting {
+    color: #fff;
+    font-size: 20px;
+}
