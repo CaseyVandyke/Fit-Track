@@ -120,7 +120,7 @@ function routinePost() {
       },
       success: (response) => {
         if (response) {
-          $('.result-message').html('<p>You just created a workout routine!</p>');
+          $('.result-message').html('<p class="routine-creation">You just created a workout routine!</p>');
           $('.target-muscle').val('');
           $('.workout').val('');
           $('.reps').val('');
@@ -229,10 +229,10 @@ function dietsPost() {
           $('.notes').val('');
           $('.author').val('');
           $('.diet-results').append(`<div data-routine-id="${response._id}" class="diet-click">
-                                        <li><a href="${response.title}">Diet: ${response.title}</a></li>
-                                        <li><a href="${response.calories}">Calories: ${response.calories}</a></li>
-                                        <li><a href="${response.recipe}">Recipe: ${response.recipe}</a></li>
-                                        <li><a href="${response.notes}">Notes: ${response.notes}</a></li>
+                                        <li><a href="${response.title}">${response.title}</a></li>
+                                        <li><a href="${response.calories}">${response.calories}</a></li>
+                                        <li><a href="${response.recipe}">${response.recipe}</a></li>
+                                        <li><a href="${response.notes}">${response.notes}</a></li>
                                     </div>`);
         }
       },

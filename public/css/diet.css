@@ -36,15 +36,19 @@
 }
 
 .diet-view {
-    color: #FFDB07;
-    border-bottom: 2px solid #FFDB07;
+    color: #fff;
+    border-bottom: 2px solid #FF0000;
     padding: 5px;
     width: 150px;
-    text-align: left;
     margin: 10px;
     font-size: 40px;
     font-weight: 500;
     text-transform: uppercase;
+}
+
+.profile-wrap {
+    text-align: center;
+    margin-top: 100px;
 }
 
 .diet-click {
@@ -55,6 +59,7 @@
     margin: 10px 10px;
     display: inline-block;
     padding: 10px;
+    border-radius: 3px;
 }
 
 .diet-click > li {
@@ -83,6 +88,7 @@
 
 .diet-results {
     margin: 30px;
+    text-align: center;
 }
 
 .diet-title {
