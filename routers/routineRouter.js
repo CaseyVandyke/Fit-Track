@@ -40,6 +40,7 @@ router.get('/routines', jwtAuth, (req,res, next) => {
 
 // Add a new routine in the databse
 router.post('/routines', jwtAuth, (req,res, next) => {
+  console.log(req.body);
   Routine.create(req.body)
   .then((routine) => {
     res.send(routine);

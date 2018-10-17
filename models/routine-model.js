@@ -4,7 +4,9 @@ const mongoose = require('mongoose');
 const User = require('./users-model');
 mongoose.Promise = global.Promise;
 
-const commentSchema = mongoose.Schema({ comment: String});
+const commentSchema = mongoose.Schema({
+    comment: String
+});
 //Creat routine Schema and model
 
 const routineSchema = mongoose.Schema({
@@ -24,11 +26,14 @@ const routineSchema = mongoose.Schema({
         type: Number,
         required: [true, 'Repetitions field is required']
     },
+    weight: {
+        type: Number
+    },
     img: String,
     author: {
         type: mongoose.Schema.Types.Mixed,
         ref: 'users'
-    } 
+    }
 
 });
 

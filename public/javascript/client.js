@@ -6,8 +6,6 @@ $("#signup-btn").on('click', function (e) {
             <input type="text" placeholder="Username" class="js-username-auth">
             <input type="text" placeholder="Password" class="js-password-auth">
             <br/>
-            <button class="profile-login">Login</button>
-            <p class="btn-space">Or</p>
             <button class="profile-signup">Sign up</button>
     </section>`)
     $('#login-wrapper').show();
@@ -23,8 +21,6 @@ $("#login-btn").on('click', function (e) {
             <input type="text" placeholder="Password" class="js-password-auth">
             <br/>
             <button class="profile-login">Login</button>
-            <p class="btn-space">Or</p>
-            <button class="profile-signup">Sign up</button>
     </section>`)
     $('#login-wrapper').show();
     $('#landing-content').hide();

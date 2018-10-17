@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +11,7 @@
     <link rel="stylesheet" href="./css/profile.css">
     <title>Profile page</title>
 </head>
+
 <body>
     <main>
         <nav class="nav-container">
@@ -17,23 +19,24 @@
             <li><a href="#">Home</a></li>
             <li><a href="./routine.html" class="routines-nav">Routines</a></li>
             <li><a href="./diet.html">Diets</a></li>
+            <button class="logout-btn">Logout</button>
         </nav>
         <section id="landing-content">
-                <div class="routine-icon">
-                    <li class="icon-style"><i class="fas fa-dumbbell fa-2x"></i></li>
-                    <div class="text-style">
+                <div class="icon-style">
+                        <li class="icon-x"><i class="fas fa-dumbbell fa-2x"></i></li>
                         <p class="icon-text">Create custom workout routines to avoid plateau.</p>
+                        <li><a href="routine.html" class="routine-direct">Creat a Routine</a></li>
                     </div>
-                </div>
-                <div class="diet-icon">
-                    <li class="icon-style"><i class="fas fa-utensils fa-2x"></i></li>
-                    <div class="text-style">
+                    <div class="icon-style">
+                        <li class="icon-x"><i class="fas fa-utensils fa-2x"></i></li>
                         <p class="icon-text">Create a personalized diet for health and wellness.</p>
+                        <li><a href="diet.html" class="diet-direct">Creat a Diet</a></li>
                     </div>
-                </div>
-            </section>
+        </section>
     </main>
-        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-        <script src="./javascript/profile.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+    <script src="./javascript/profile.js"></script>
 </body>
+
 </html>

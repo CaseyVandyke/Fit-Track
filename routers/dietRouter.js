@@ -35,22 +35,11 @@ router.get('/diets', jwtAuth, (req, res, next) => {
 });
 
 router.post('/diets', jwtAuth, (req, res, next) => {
-    const payload = {
-        title: req.body.title,
-        calories: req.body.calories,
-        img: req.body.img,
-        recipe: req.body.recipe,
-        notes: req.body.notes,
-        author: req.body.author
-    }
-    Diet.create(payload)
-        .then((diet) => res.status(201).json(diet))
-        .catch((err) => {
-            console.error(err);
-            return res.status(500).json({
-                error: 'something went wrong'
-            });
-        });
+    console.log(req.body);
+  Diet.create(req.body)
+  .then((diet) => {
+    res.send(diet);
+  }).catch(next)
 });
 
 router.put('/diets/:id', jwtAuth, (req, res, next) => {

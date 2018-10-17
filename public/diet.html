@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
         crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/profile.css">
     <link rel="stylesheet" href="./css/diet.css">
     <title>Routine-Profile</title>
 </head>
@@ -19,39 +20,44 @@
             <li><a href="./profile.html">Home</a></li>
             <li><a href="./routine.html" class="routines-nav">Routines</a></li>
             <li><a href="#">Diets</a></li>
+            <button class="logout-btn">Logout</button>
         </nav>
         <div class="profile-tab">
             <ul class="profile-wrap">
-                <li><a href='#' class="diet-tab">Create diet</a></li>
+                <li><a href='#' class="diet-tab">Create a diet</a></li>
             </ul>
         </div>
         <form class="diet-catch" autocomplete="off">
-                <fieldset>
-                  <legend>diet record</legend>
-                  <p>
+            <fieldset>
+                <legend>diet record</legend>
+                <p>
                     <input type="text" name="title" class="routine-data diet-title" placeholder="Enter name of diet">
                     <label for="title"></label>
-                  </p>
-                  <p>
-                  <input type="text" name="calories" class="routine-data calories" placeholder="Enter total calories">
-                  <label for="calories"></label>
-                  </p>
-                  <p>
-                  <input type="text" name="recipe" class="routine-data recipe" placeholder="Enter recipe">
-                  <label for="recipe"></label>
-                  </p>
-                  <p>
-                  <input type="text" name="notes" class="routine-data notes" placeholder="Enter notes">
-                  <label for="notes"></label>
-                  </p>
-                  <p>
-                  <input type="text" name="author" class="routine-data author" placeholder="Enter your name">
-                  <label for="author"></label>
-                  </p>
-                  <button class="diet-submit">Submit</button>
-                </fieldset>
-              </form>
-        <div class="diet-results"></div>
+                </p>
+                <p>
+                    <input type="text" name="calories" class="routine-data calories" placeholder="Enter total calories">
+                    <label for="calories"></label>
+                </p>
+                <p>
+                    <input type="text" name="recipe" class="routine-data recipe" placeholder="Enter recipe">
+                    <label for="recipe"></label>
+                </p>
+                <p>
+                    <input type="text" name="notes" class="routine-data notes" placeholder="Enter notes">
+                    <label for="notes"></label>
+                </p>
+                <p>
+                    <input type="text" name="author" class="routine-data author" placeholder="Enter your name">
+                    <label for="author"></label>
+                </p>
+                <button class="diet-submit">Submit</button>
+                <ul class="profile-wrap">
+                    <li><a href='#' class="diet-view">Diets</a></li>
+                </ul>
+                <div class="diet-message"></div>
+                <div class="diet-results"></div>
+            </fieldset>
+        </form>
     </main>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>

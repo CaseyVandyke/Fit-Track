@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
         crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/profile.css">
     <link rel="stylesheet" href="./css/routine.css">
     <title>Routine-Profile</title>
 </head>
@@ -19,17 +20,18 @@
             <li><a href="./profile.html">Home</a></li>
             <li><a href="#" class="routines-nav">Routines</a></li>
             <li><a href="./diet.html">Diets</a></li>
+            <button class="logout-btn">Logout</button>
         </nav>
         <div class="profile-tab">
             <ul class="profile-wrap">
-                <li><a href='#' class="routine-tab">Create routine</a></li>
+                <li><a href='#' class="routine-tab">Create a routine</a></li>
             </ul>
         </div>
         <form class="routine-catch" autocomplete="off">
             <fieldset>
                 <legend>routine record</legend>
                 <p>
-                    <input type="text" name="routine" class="routine-data muscleType" placeholder="Enter muscle group">
+                    <input type="text" name="routine" class="routine-data target-muscle" placeholder="Enter muscle group">
                     <label for="routine"></label>
                 </p>
                 <p>
@@ -49,10 +51,15 @@
                     <label for="author"></label>
                 </p>
                 <button class="routine-submit">Submit</button>
+                <ul class="profile-wrap">
+                    <li><a href='#' class="routine-view">Routines</a></li>
+                </ul>
+                <div class="result-message"></div>
+                <div class="routine-results"></div>
             </fieldset>
         </form>
-        <div class="routine-results"></div>
     </main>
+    
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
     <script src="./javascript/profile.js"></script>

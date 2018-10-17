@@ -1,8 +1,11 @@
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
+
+*, *:before, *:after {
+    box-sizing: inherit;
+  }
 
 body {
     background-color: #2A2929;
@@ -11,8 +14,8 @@ body {
 
 .nav-container {
     text-align: right;
-    border-top: 3px solid #E8B00C;
-    border-bottom: 3px solid #E8B00C; 
+    border-top: 3px solid #FFDB07;
+    border-bottom: 3px solid #FFDB07; 
     margin-bottom: 30px;
 
 }
@@ -44,41 +47,58 @@ body {
     text-decoration: underline;
 }
 
+.logout-btn {
+    background-color: #FF0000;
+    color: #fff;
+    border: none;
+    width: 75px;
+    height:30px;
+    font-size: 20px;
+    border-radius: 3px;
+    margin-right: 20px;
+}
+
 #landing-content {
     text-align: center;
 }
 
-.routine-icon, .diet-icon {
-    background: #2A2929;
-    border-radius: 3px;
-    margin: 30px 20px;;
-    height: 300px;
-    padding: 20px;
-    font-size: 25px;
-    text-align: center;
-    width: 30%;
-    display: inline-block;
-}
-
-.routine-icon {
-    color: #E8B00C;
-    border: 2px solid #E8B00C;
-}
-
-.diet-icon {
-    color: #08FF83;
-    border: 2px solid #08FF83;
-}
-
-
 .icon-style {
+    width: 350px;
+    height: 330px;
+    border: 2px solid #FFDB07;
+    margin: 20px;
+    display: inline-block;
+    padding: 20px;
+    border-radius: 3px;
+}
+
+.icon-style > li {
     list-style: none;
-    margin-top: 20px;
+    margin-top: 30px;
+}
+
+.icon-style > li > a {
+    text-decoration: none; 
+    color: #fff;
+    font-size: 40px;
+    text-transform: uppercase;
+}
+
+.icon-style > li > a:hover {
+    color: #FF0000;
+}
+
+.icon-x {
+    list-style: none;
+    color: #08FF83;
+    margin-top: 30px;
 }
 
 .icon-text {
-    margin-top: 20px;
+    margin-top: 30px;
+    color: #08FF83;
     line-height: 1.8em;
+    font-size: 25px;
 }
 
 ul a {
@@ -98,17 +118,6 @@ ul a {
 
 .profile-wrap {
     margin: 10px;
-}
-
-.routine-tab,
-.diet-tab {
-    text-decoration: none;
-    color: #08FF83;
-    border-bottom: 2px solid #08FF83;
-    padding: 5px;
-    width: 250px;
-    margin: 10px;
-    justify-content: center;
 }
 
 .profile-tab li {
@@ -159,3 +168,15 @@ legend {
     margin-bottom: 20px;
     font-weight: 300;
 }
+
+/* MEDIA QUERIES */
+
+@media only screen and (max-width: 1130px) {
+    .routine-icon, .diet-icon {
+        width: 25%;
+        margin: 0 auto;
+    }
+}
+
+
+
