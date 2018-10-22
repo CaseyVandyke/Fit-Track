@@ -4,6 +4,7 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const faker = require('faker');
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
 
 // this makes the should syntax available throughout
 // this module
@@ -17,7 +18,8 @@ const {
     app
 } = require('../server');
 const {
-    TEST_DATABASE_URL
+    TEST_DATABASE_URL,
+    JWT_SECRET
 } = require('../config');
 
 chai.use(chaiHttp);
@@ -35,28 +37,32 @@ function tearDownDb() {
     });
 }
 
-
-// used to put randomish documents in db
-// so we have data to work with and assert about.
-// we use the Faker library to automatically
-// generate placeholder values for author, title, content
-// and then we insert that data into mongo
 function seedDietData() {
     console.info('seeding diet data');
     const seedData = [];
     for (let i = 1; i <= 10; i++) {
-        seedData.push({
-            title: faker.lorem.text(),
-            calories: faker.random.number(),
-            img: faker.image.image(),
-            recipe: faker.lorem.text(),
-            notes: faker.lorem.text(),
-            author: faker.lorem.text()
-
-        });
+        seedData.push(generateDiets());
     }
     // this will return a promise
     return Diet.insertMany(seedData);
+}
+
+function generateDiets() {
+    return {
+        title: faker.lorem.text(),
+        calories: faker.random.number(),
+        img: faker.image.image(),
+        recipe: faker.lorem.text(),
+        notes: faker.lorem.text(),
+        author: faker.lorem.text()
+    }
+}
+
+function generateUserData() {
+    return {
+        username: faker.internet.userName(),
+        password: faker.internet.password()
+    }
 }
 
 
@@ -87,13 +93,22 @@ describe('Diet API resource', function () {
 
         it('should return all existing diets', function () {
             // strategy:
-            //    1. get back all posts returned by by GET request to `/posts`
+            //    1. get back all diets returned by GET request to `/posts`
             //    2. prove res has right status, data type
             //    3. prove the number of posts we got back is equal to number
             //       in db.
+            let user = generateUserData();
+            var token = jwt.sign({
+                user
+            }, JWT_SECRET);
+            const newDiet = generateDiets();
             let res;
             return chai.request(app)
                 .get('/api/diets')
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+                .set('Authorization', `Bearer ${token}`)
+                .send(newDiet)
                 .then(_res => {
                     res = _res;
                     res.should.have.status(200);
@@ -110,13 +125,21 @@ describe('Diet API resource', function () {
         });
     });
 
-
     it('should return diets with right fields', function () {
         // Strategy: Get back all diets, and ensure they have expected keys
 
         let resDiet;
+        let user = generateUserData();
+        var token = jwt.sign({
+            user
+        }, JWT_SECRET);
+        const newDiet = generateDiets();
         return chai.request(app)
             .get('/api/diets')
+            .set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+            .set('Authorization', `Bearer ${token}`)
+            .send(newDiet)
             .then(function (res) {
 
                 res.should.have.status(200);
@@ -125,7 +148,7 @@ describe('Diet API resource', function () {
                 res.body.should.have.lengthOf.at.least(1);
                 res.body.forEach(function (dietPost) {
                     dietPost.should.be.a('object');
-                    dietPost.should.include.keys('title', 'calories', 'recipe', 'notes');
+                    dietPost.should.include.keys('title', 'calories', 'recipe', 'notes', 'author');
                 });
                 // just check one of the posts that its values match with those in db
                 // and we'll assume it's true for rest
@@ -133,11 +156,11 @@ describe('Diet API resource', function () {
                 return Diet.findById(resDiet._id);
             })
             .then(diet => {
-                diet.title.should.not.equal(null);
-                diet.calories.should.not.equal(null);
-                diet.recipe.should.not.equal(null);
-                diet.notes.should.not.equal(null);
-                diet.author.should.not.equal(null);
+                resDiet.title.should.equal(diet.title);
+                resDiet.calories.should.equal(diet.calories);
+                resDiet.recipe.should.equal(diet.recipe);
+                resDiet.notes.should.equal(diet.notes);
+                resDiet.author.should.equal(diet.author);
             });
     });
 
@@ -148,25 +171,24 @@ describe('Diet API resource', function () {
         // right keys, and that `id` is there (which means
         // the data was inserted into db)
         it('should add a new diet', function () {
-
-            const newDiet = {
-                title: faker.lorem.words(),
-                calories: faker.random.number(),
-                img: faker.image.food(),
-                recipe: faker.lorem.word(),
-                notes: faker.lorem.words(),
-                author: faker.lorem.words()
-            }
+            let user = generateUserData();
+            var token = jwt.sign({
+                user
+            }, JWT_SECRET);
+            const newDiet = generateDiets();
             return chai.request(app)
                 .post('/api/diets')
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+                .set('Authorization', `Bearer ${token}`)
                 .send(newDiet)
                 .then(function (res) {
-                    res.should.have.status(201);
+                    res.should.have.status(200);
                     res.should.be.json;
                     console.log(res.body);
                     res.body.should.be.a('object');
                     res.body.should.include.keys(
-                        'title', 'calories', 'recipe', 'notes');
+                        'title', 'calories', 'recipe', 'notes', 'author');
                     res.body.title.should.equal(newDiet.title);
                     // cause Mongo should have created id on insertion
                     res.body._id.should.not.equal(null);
@@ -184,15 +206,11 @@ describe('Diet API resource', function () {
 
     describe('diet PUT request', function () {
         it('should update fields sent', function () {
-            const updateDiet = {
-                title: faker.lorem.words(),
-                calories: faker.random.number(),
-                img: faker.image.food(),
-                recipe: faker.lorem.word(),
-                notes: faker.lorem.words(),
-                notes: faker.lorem.words(),
-                author: faker.lorem.words()
-            }
+            let user = generateUserData();
+            var token = jwt.sign({
+                user
+            }, JWT_SECRET);
+            const updateDiet = generateDiets();
 
 
             return Diet
@@ -203,6 +221,7 @@ describe('Diet API resource', function () {
                         .put(`/api/diets/${entry.id}`)
                         .set('Content-Type', 'application/json')
                         .set('Accept', 'application/json')
+                        .set('Authorization', `Bearer ${token}`)
                         .send(updateDiet);
                 })
                 .then(function (res) {
@@ -223,6 +242,10 @@ describe('Diet API resource', function () {
     //works
     describe('Diet DELETE endpoint', function () {
         it('should delete a diet by id', function () {
+            let user = generateUserData();
+            var token = jwt.sign({
+                user
+            }, JWT_SECRET);
             let deletedDiet;
 
             return Diet
@@ -231,6 +254,9 @@ describe('Diet API resource', function () {
                     deletedDiet = _post;
                     return chai.request(app)
                         .delete(`/api/diets/${deletedDiet._id}`)
+                        .set('Content-Type', 'application/json')
+                        .set('Accept', 'application/json')
+                        .set('Authorization', `Bearer ${token}`)
                 })
                 .then(res => {
                     res.should.have.status(200);

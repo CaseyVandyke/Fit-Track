@@ -7,7 +7,6 @@ const expect = chai.expect;
 const should = require('chai').should();
 const faker = require('faker');
 const jwt = require('jsonwebtoken');
-const passport = require('passport');
 
 const User = require('../models/users-model');
 const {
@@ -67,7 +66,7 @@ describe('User api routes', function () {
         return closeServer();
     });
 
-    //works
+    
     describe('GET all users in database', function () {
         it('should get all users in the database', function () {
             let user = generateUserData();
@@ -87,12 +86,21 @@ describe('User api routes', function () {
         });
     });
 
-    //works
     describe('POST request for /users', function () {
         it('should create a new user in the database', function () {
-            let newUser = generateUserData();
+            let user = generateUserData();
+            const newUser = {
+                username: faker.internet.userName(),
+                password: faker.internet.password()
+            };
+            var token = jwt.sign({
+                user
+            }, JWT_SECRET);
             return chai.request(app)
                 .post('/api/users')
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+                .set('Authorization', `Bearer ${token}`)
                 .send(newUser)
                 .then(function (res) {
                     res.should.have.status(201);
@@ -101,7 +109,6 @@ describe('User api routes', function () {
         });
     });
 
-//works
 describe('PUT request for /users/:id', function () {
     it('should update a user in the database with a specific id', function () {
         let user = generateUserData();

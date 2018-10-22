@@ -7,6 +7,8 @@
     box-sizing: inherit;
   }
 
+  * {-webkit-font-smoothing: antialiased;}
+
 body {
     background-color: #2A2929;
     font-family: Roboto, sans-serif;
@@ -22,8 +24,8 @@ body {
 
 .float-name {
     float: left;
-    color: #08FF83;
-    font-size: 20px;
+    color: #fff;
+    font-size: 25px;
     font-weight: 300;
 }
 
@@ -40,14 +42,17 @@ body {
     text-decoration: none;
     color: #08FF83;
     font-size: 20px;
-    font-weight: 300;
 }
 
-.nav-container li:hover {
-    text-decoration: underline;
+.nav-container .active {
+    border-bottom: 2px solid #08FF83;
 }
 
-.logout-btn {
+.nav-container a:hover {
+    border-bottom: 2px solid #08FF83;
+}
+
+.nav-container .logout-btn {
     background-color: #FF0000;
     color: #fff;
     border: none;
@@ -56,6 +61,8 @@ body {
     font-size: 20px;
     border-radius: 3px;
     margin-right: 20px;
+    padding: 5px;
+    text-decoration: none;
 }
 
 #landing-content {
@@ -178,5 +185,40 @@ legend {
     }
 }
 
+@media only screen and (max-width: 640px) {
+    .nav-container li {
+        display: block;
+        padding: 10px;
+        border: 2px solid transparent;
+    }
+
+    .nav-container li:hover {
+        border: 2px solid #FFDB07;
+
+    }
+
+    .nav-container .float-name {
+        float: none;
+    }
+    .nav-container .float-name:hover {
+        background: none;
+        border: 2px solid transparent;
+    }
+
+    .nav-container .logout-btn {
+        margin: 0;
+        background: none;
+        
+    }
+
+    .nav-container a {
+        display: block;
+    }
+
+    .nav-container a:hover {
+        border: none;
+    }
+
+}
 
 

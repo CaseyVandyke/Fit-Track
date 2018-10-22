@@ -26,9 +26,6 @@ const routineSchema = mongoose.Schema({
         type: Number,
         required: [true, 'Repetitions field is required']
     },
-    weight: {
-        type: Number
-    },
     img: String,
     author: {
         type: mongoose.Schema.Types.Mixed,

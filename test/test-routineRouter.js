@@ -4,6 +4,7 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const faker = require('faker');
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
 
 // this makes the should syntax available throughout
 // this module
@@ -16,8 +17,10 @@ const {
     runServer,
     app
 } = require('../server');
+
 const {
-    TEST_DATABASE_URL
+    TEST_DATABASE_URL,
+    JWT_SECRET
 } = require('../config');
 
 chai.use(chaiHttp);
@@ -42,21 +45,33 @@ function seedRoutineData() {
     console.info('seeding routine data');
     const seedData = [];
     for (let i = 1; i <= 10; i++) {
-        seedData.push({
-            targetMuscle: faker.lorem.text(),
-            workout: faker.lorem.text(),
-            sets: faker.random.number(),
-            reps: faker.random.number(),
-            img: faker.image.image(),
-            author: faker.lorem.text()
-
-        });
+        seedData.push(generateRoutines());
     }
     // this will return a promise
     return Routine.insertMany(seedData);
 }
 
+function generateRoutines() {
+    return {
+        targetMuscle: faker.lorem.text(),
+        workout: faker.lorem.text(),
+        sets: faker.random.number(),
+        reps: faker.random.number(),
+        img: faker.image.image(),
+        author: faker.lorem.text()
+    }
+}
 
+
+function generateUserData() {
+    return {
+        username: faker.internet.userName(),
+        password: faker.internet.password()
+    }
+}
+
+const username = faker.internet.userName();
+const password = faker.internet.password();
 describe('Routine API resource', function () {
 
     before(function () {
@@ -64,7 +79,20 @@ describe('Routine API resource', function () {
     });
 
     beforeEach(function () {
-        return seedRoutineData();
+        return User.hashpassword(password).then(password => {
+            User.create({username, password}).then(data => {
+                const newRoutine = {
+                targetMuscle: faker.lorem.text(),
+                workout: faker.lorem.text(),
+                sets: faker.random.number(),
+                reps: faker.random.number(),
+                img: faker.image.image(),
+                author: faker.lorem.text()
+                }
+                console.log(data);
+                console.log('hello');
+            })
+        })
     });
 
     afterEach(function () {
@@ -77,9 +105,7 @@ describe('Routine API resource', function () {
         return closeServer();
     });
 
-    // note the use of nested `describe` blocks.
-    // this allows us to make clearer, more discrete tests that focus
-    // on proving something small
+
     describe('GET endpoint', function () {
 
         it('should return all existing routines', function () {
@@ -89,8 +115,18 @@ describe('Routine API resource', function () {
             //    3. prove the number of routines we got back is equal to number
             //       in db.
             let res;
+            let user = generateUserData();
+            var token = jwt.sign({
+                user
+            }, JWT_SECRET);
+            const newRoutine = generateRoutines();
             return chai.request(app)
+           
                 .get('/api/routines')
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+                .set('Authorization', `Bearer ${token}`)
+                .send(newRoutine)
                 .then(_res => {
                     res = _res;
                     res.should.have.status(200);
@@ -108,11 +144,18 @@ describe('Routine API resource', function () {
     });
 
     it('should return routines with right fields', function () {
-        // Strategy: Get back all diets, and ensure they have expected keys
+        // Strategy: Get back all routines, and ensure they have expected keys
 
         let resRoutine;
+        let user = generateUserData();
+        var token = jwt.sign({
+            user
+        }, JWT_SECRET);
         return chai.request(app)
             .get('/api/routines')
+            .set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+            .set('Authorization', `Bearer ${token}`)
             .then(function (res) {
 
                 res.should.have.status(200);
@@ -143,17 +186,16 @@ describe('Routine API resource', function () {
         // right keys, and that `id` is there (which means
         // the data was inserted into db)
         it('should add a new routine', function () {
-
-            const newRoutine = {
-                targetMuscle: faker.lorem.text(),
-                workout: faker.lorem.text(),
-                sets: faker.random.number(),
-                reps: faker.random.number(),
-                img: faker.image.image(),
-                author: faker.lorem.text()
-            }
+            let user = generateUserData();
+            var token = jwt.sign({
+                user
+            }, JWT_SECRET);
+            const newRoutine = generateRoutines();
             return chai.request(app)
                 .post('/api/routines')
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+                .set('Authorization', `Bearer ${token}`)
                 .send(newRoutine)
                 .then(function (res) {
                     res.should.have.status(200);
@@ -179,14 +221,11 @@ describe('Routine API resource', function () {
 
     describe('diarypost PUT request', function () {
         it('should update fields sent', function () {
-            const updateRoutine = {
-                targetMuscle: faker.lorem.text(),
-                workout: faker.lorem.text(),
-                sets: faker.random.number(),
-                reps: faker.random.number(),
-                img: faker.image.image(),
-                author: faker.lorem.text()
-            }
+            let user = generateUserData();
+            var token = jwt.sign({
+                user
+            }, JWT_SECRET);
+            const updateRoutine = generateRoutines();
 
 
             return Routine
@@ -197,6 +236,7 @@ describe('Routine API resource', function () {
                         .put(`/api/diets/${entry.id}`)
                         .set('Content-Type', 'application/json')
                         .set('Accept', 'application/json')
+                        .set('Authorization', `Bearer ${token}`)
                         .send(updateRoutine);
                 })
                 .then(function (res) {
@@ -217,7 +257,11 @@ describe('Routine API resource', function () {
 
     //works
     describe('Diet DELETE endpoint', function () {
-        it('should delete a diet by id', function () {
+        it('should delete a routine by id', function () {
+            let user = generateUserData();
+            var token = jwt.sign({
+                user
+            }, JWT_SECRET);
             let deletedRoutine;
 
             return Routine
@@ -226,6 +270,9 @@ describe('Routine API resource', function () {
                     deletedRoutine = _post;
                     return chai.request(app)
                         .delete(`/api/routines/${deletedRoutine._id}`)
+                        .set('Content-Type', 'application/json')
+                        .set('Accept', 'application/json')
+                        .set('Authorization', `Bearer ${token}`)
                 })
                 .then(res => {
                     res.should.have.status(200);
