@@ -12,6 +12,8 @@ const should = require('chai').should();
 const expect = chai.expect;
 
 const Routine = require('../models/routine-model');
+const User = require('../models/users-model');
+
 const {
     closeServer,
     runServer,
@@ -39,69 +41,44 @@ function tearDownDb() {
 }
 
 
-// used to put randomish documents in db
-// so we have data to work with and assert about.
-function seedRoutineData() {
-    console.info('seeding routine data');
-    const seedData = [];
-    for (let i = 1; i <= 10; i++) {
-        seedData.push(generateRoutines());
-    }
-    // this will return a promise
-    return Routine.insertMany(seedData);
-}
 
-function generateRoutines() {
-    return {
-        targetMuscle: faker.lorem.text(),
-        workout: faker.lorem.text(),
-        sets: faker.random.number(),
-        reps: faker.random.number(),
-        img: faker.image.image(),
-        author: faker.lorem.text()
-    }
-}
-
-
-function generateUserData() {
-    return {
-        username: faker.internet.userName(),
-        password: faker.internet.password()
-    }
-}
 
 const username = faker.internet.userName();
 const password = faker.internet.password();
+
 describe('Routine API resource', function () {
 
     before(function () {
-        return runServer(TEST_DATABASE_URL);
+          runServer(TEST_DATABASE_URL);
+           return User.hashPassword(password).then(password => {
+            
+            User.create({username, password}).then(userData => {
+                let newRoutine = {
+                    targetMuscle: faker.lorem.text(),
+                    workout: faker.lorem.text(),
+                    sets: faker.random.number(),
+                    reps: faker.random.number(),
+                    img: faker.image.image(),
+                    author: userData.username
+                };
+                Routine.create(newRoutine);
+            })
+        })
+         
     });
 
     beforeEach(function () {
-        return User.hashpassword(password).then(password => {
-            User.create({username, password}).then(data => {
-                const newRoutine = {
-                targetMuscle: faker.lorem.text(),
-                workout: faker.lorem.text(),
-                sets: faker.random.number(),
-                reps: faker.random.number(),
-                img: faker.image.image(),
-                author: faker.lorem.text()
-                }
-                console.log(data);
-                console.log('hello');
-            })
-        })
+        
     });
 
     afterEach(function () {
         // tear down database so we ensure no state from this test
         // effects any coming after.
-        return tearDownDb();
+        //return tearDownDb();
     });
 
     after(function () {
+        tearDownDb();
         return closeServer();
     });
 
@@ -115,31 +92,42 @@ describe('Routine API resource', function () {
             //    3. prove the number of routines we got back is equal to number
             //       in db.
             let res;
-            let user = generateUserData();
             var token = jwt.sign({
-                user
-            }, JWT_SECRET);
-            const newRoutine = generateRoutines();
+                
+                        username,
+                        password
+                    
+            }, 
+            JWT_SECRET, 
+            {
+              algorithm: 'HS256',
+              subject: username,
+              expiresIn: '7d'
+            });
+            
+            User.find({"username" : username})
+            .then((users) => {
+                
             return chai.request(app)
            
                 .get('/api/routines')
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json')
                 .set('Authorization', `Bearer ${token}`)
-                .send(newRoutine)
                 .then(_res => {
                     res = _res;
                     res.should.have.status(200);
                     // otherwise our db seeding didn't work
                     res.body.should.have.lengthOf.at.least(1);
 
-                    return Routine.count();
+                    Routine.count();
                 })
                 .then(count => {
                     // the number of returned posts should be same
                     // as number of posts in DB
                     res.body.should.have.lengthOf(count);
                 });
+             })
         });
     });
 
@@ -147,36 +135,48 @@ describe('Routine API resource', function () {
         // Strategy: Get back all routines, and ensure they have expected keys
 
         let resRoutine;
-        let user = generateUserData();
         var token = jwt.sign({
-            user
-        }, JWT_SECRET);
-        return chai.request(app)
-            .get('/api/routines')
-            .set('Content-Type', 'application/json')
-            .set('Accept', 'application/json')
-            .set('Authorization', `Bearer ${token}`)
-            .then(function (res) {
+                
+                        username,
+                        password
+                    
+            }, 
+            JWT_SECRET, 
+            {
+              algorithm: 'HS256',
+              subject: username,
+              expiresIn: '7d'
+            });
+            
+            User.find({"username" : username})
+            .then((users) => {
+            return chai.request(app)
+                .get('/api/routines')
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+                .set('Authorization', `Bearer ${token}`)
+                .then(function (res) {
 
-                res.should.have.status(200);
-                res.should.be.json;
-                res.body.should.be.a('array');
-                res.body.should.have.lengthOf.at.least(1);
-                res.body.forEach(function (routinePost) {
-                    routinePost.should.be.a('object');
-                    routinePost.should.include.keys('targetMuscle', 'workout', 'sets', 'reps', 'author');
+                    res.should.have.status(200);
+                    res.should.be.json;
+                    res.body.should.be.a('array');
+                    res.body.should.have.lengthOf.at.least(1);
+                    res.body.forEach(function (routinePost) {
+                        routinePost.should.be.a('object');
+                        routinePost.should.include.keys('targetMuscle', 'workout', 'sets', 'reps', 'author');
+                    });
+                    // just check one of the posts that its values match with those in db
+                    // and we'll assume it's true for rest
+                    resRoutine = res.body[0];
+                    Routine.findById(resRoutine._id);
+                })
+                .then(routine => {
+                    routine.targetMuscle.should.not.equal(null);
+                    routine.workout.should.not.equal(null);
+                    routine.sets.should.not.equal(null);
+                    routine.reps.should.not.equal(null);
+                    routine.author.should.not.equal(null);
                 });
-                // just check one of the posts that its values match with those in db
-                // and we'll assume it's true for rest
-                resRoutine = res.body[0];
-                return Routine.findById(resRoutine._id);
-            })
-            .then(routine => {
-                routine.targetMuscle.should.not.equal(null);
-                routine.workout.should.not.equal(null);
-                routine.sets.should.not.equal(null);
-                routine.reps.should.not.equal(null);
-                routine.author.should.not.equal(null);
             });
     });
 
@@ -186,11 +186,21 @@ describe('Routine API resource', function () {
         // right keys, and that `id` is there (which means
         // the data was inserted into db)
         it('should add a new routine', function () {
-            let user = generateUserData();
             var token = jwt.sign({
-                user
-            }, JWT_SECRET);
-            const newRoutine = generateRoutines();
+                
+                        username,
+                        password
+                    
+            }, 
+            JWT_SECRET, 
+            {
+              algorithm: 'HS256',
+              subject: username,
+              expiresIn: '7d'
+            });
+            
+            User.find({"username" : username})
+            .then((users) => {
             return chai.request(app)
                 .post('/api/routines')
                 .set('Content-Type', 'application/json')
@@ -200,14 +210,13 @@ describe('Routine API resource', function () {
                 .then(function (res) {
                     res.should.have.status(200);
                     res.should.be.json;
-                    console.log(res.body);
                     res.body.should.be.a('object');
                     res.body.should.include.keys(
                         'targetMuscle', 'workout', 'sets', 'reps');
                     res.body.targetMuscle.should.equal(newRoutine.targetMuscle);
                     // cause Mongo should have created id on insertion
                     res.body._id.should.not.equal(null);
-                    return Routine.findById(res.body._id);
+                    Routine.findById(res.body._id);
                 })
                 .then(routine => {
                     routine.targetMuscle.should.not.equal(null);
@@ -216,41 +225,54 @@ describe('Routine API resource', function () {
                     routine.reps.should.not.equal(null);
                     routine.author.should.not.equal(null);
                 });
+            });
         });
     });
 
     describe('diarypost PUT request', function () {
         it('should update fields sent', function () {
-            let user = generateUserData();
+            
             var token = jwt.sign({
-                user
-            }, JWT_SECRET);
-            const updateRoutine = generateRoutines();
+                
+                        username,
+                        password
+                    
+            }, 
+            JWT_SECRET, 
+            {
+              algorithm: 'HS256',
+              subject: username,
+              expiresIn: '7d'
+            });
+            
+            User.find({"username" : username})
+            .then((users) => {
 
 
-            return Routine
-                .findOne()
-                .then(entry => {
-                    updateRoutine.id = entry.id;
-                    return chai.request(app)
-                        .put(`/api/diets/${entry.id}`)
-                        .set('Content-Type', 'application/json')
-                        .set('Accept', 'application/json')
-                        .set('Authorization', `Bearer ${token}`)
-                        .send(updateRoutine);
-                })
-                .then(function (res) {
-                    expect(res).to.have.status(200);
+                Routine
+                    .findOne()
+                    .then(entry => {
+                        updateRoutine.id = entry.id;
+                        return chai.request(app)
+                            .put(`/api/diets/${entry.id}`)
+                            .set('Content-Type', 'application/json')
+                            .set('Accept', 'application/json')
+                            .set('Authorization', `Bearer ${token}`)
+                            .send(updateRoutine);
+                    })
+                    .then(function (res) {
+                        expect(res).to.have.status(200);
 
-                    return Routine.findById(updateRoutine.id);
-                })
-                .then(routine => {
-                    routine.targetMuscle.should.not.equal(null);
-                    routine.workout.should.not.equal(null);
-                    routine.sets.should.not.equal(null);
-                    routine.reps.should.not.equal(null);
-                    routine.author.should.not.equal(null);
-                })
+                        Routine.findById(updateRoutine.id);
+                    })
+                    .then(routine => {
+                        routine.targetMuscle.should.not.equal(null);
+                        routine.workout.should.not.equal(null);
+                        routine.sets.should.not.equal(null);
+                        routine.reps.should.not.equal(null);
+                        routine.author.should.not.equal(null);
+                    })
+                });
         });
     });
 
@@ -258,28 +280,39 @@ describe('Routine API resource', function () {
     //works
     describe('Diet DELETE endpoint', function () {
         it('should delete a routine by id', function () {
-            let user = generateUserData();
             var token = jwt.sign({
-                user
-            }, JWT_SECRET);
-            let deletedRoutine;
+                
+                        username,
+                        password
+                    
+            }, 
+            JWT_SECRET, 
+            {
+              algorithm: 'HS256',
+              subject: username,
+              expiresIn: '7d'
+            });
+            
+            User.find({"username" : username})
+            .then((users) => {
 
-            return Routine
-                .findOne()
-                .then(_post => {
-                    deletedRoutine = _post;
-                    return chai.request(app)
-                        .delete(`/api/routines/${deletedRoutine._id}`)
-                        .set('Content-Type', 'application/json')
-                        .set('Accept', 'application/json')
-                        .set('Authorization', `Bearer ${token}`)
-                })
-                .then(res => {
-                    res.should.have.status(200);
-                    return Routine.findById(deletedRoutine._id);
-                })
-                .then(post => {
-                    should.not.exist(post);
+                Routine
+                    .findOne()
+                    .then(_post => {
+                        deletedRoutine = _post;
+                        return chai.request(app)
+                            .delete(`/api/routines/${deletedRoutine._id}`)
+                            .set('Content-Type', 'application/json')
+                            .set('Accept', 'application/json')
+                            .set('Authorization', `Bearer ${token}`)
+                    })
+                    .then(res => {
+                        res.should.have.status(200);
+                        Routine.findById(deletedRoutine._id);
+                    })
+                    .then(post => {
+                        should.not.exist(post);
+                    });
                 });
         });
     });
