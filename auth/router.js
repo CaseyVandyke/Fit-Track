@@ -27,11 +27,6 @@ router.post('/login', localAuth, (req, res) => {
   res.json({authToken});
 });
 
-router.get('/logout', function (req, res) {
-  req.logout();
-  res.redirect('/');
-});
-
 
 
 const jwtAuth = passport.authenticate('jwt', {session: false});
