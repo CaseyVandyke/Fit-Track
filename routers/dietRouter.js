@@ -6,7 +6,7 @@ const User = require('../models/users-model');
 const jwt = require('jsonwebtoken');
 
 const jwtAuth = passport.authenticate('jwt', { session: false });
-
+/*
 router.get('/diets/:id', jwtAuth, (req, res, next) => {
     Diet.find({
         '_id': req.params.id
@@ -21,7 +21,7 @@ router.get('/diets/:id', jwtAuth, (req, res, next) => {
         }
     })
 });
-
+*/
 router.get('/diets', jwtAuth, (req, res, next) => {
     Diet.find({"author": req.user.username})
         .then((diet) => {
@@ -42,6 +42,7 @@ router.post('/diets', jwtAuth, (req, res, next) => {
   }).catch(next)
 });
 
+/*
 router.put('/diets/:id', jwtAuth, (req, res, next) => {
     Diet.findByIdAndUpdate({
             _id: req.params.id
@@ -54,6 +55,7 @@ router.put('/diets/:id', jwtAuth, (req, res, next) => {
             });
         });
 });
+*/
 
 //Delete a routine from the database
 router.delete('/diets/:id', jwtAuth, (req, res, next) => {

@@ -4,7 +4,7 @@ $("#signup-btn").on('click', function (e) {
     e.preventDefault();
     $(".login-results").html(`<section id="login-wrapper">
             <input type="text" placeholder="Username" class="js-username-auth">
-            <input type="text" placeholder="Password" class="js-password-auth">
+            <input type="password" placeholder="Password" class="js-password-auth">
             <br/>
             <button class="profile-signup">Sign up</button>
     </section>`)
@@ -18,7 +18,7 @@ $("#login-btn").on('click', function (e) {
     e.preventDefault();
     $(".login-results").html(`<section id="login-wrapper">
             <input type="text" placeholder="Username" class="js-username-auth">
-            <input type="text" placeholder="Password" class="js-password-auth">
+            <input type="password " placeholder="Password" class="js-password-auth">
             <br/>
             <button class="profile-login">Login</button>
     </section>`)
@@ -30,7 +30,7 @@ $("#login-btn").on('click', function (e) {
 
 
 function createUser() {
-    $('#signup-btn').submit((e) => {
+    $('.login-results').on('click', '.profile-signup', function(e){
         e.preventDefault();
 
         const username = $('.js-username-auth').val();
@@ -45,9 +45,14 @@ function createUser() {
             },
             success: (data) => {
                 if (data) {
+                    let jwt = data.authToken;
+                    sessionStorage.setItem('Bearer', jwt);
                     $('.js-username-auth').val('');
                     $('.js-password-auth').val('');
                 }
+                
+                const pageName = "./profile.html";
+                $(location).attr('href', pageName);
             },
 
             error: function (req, error) {
@@ -88,3 +93,9 @@ $('.login-results').on('click', '.profile-login', function(event){
     }
 });
 });
+
+$('.login-form').submit(function(e){
+    e.preventDefault();
+})
+
+$(createUser);

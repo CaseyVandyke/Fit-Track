@@ -92,6 +92,12 @@ legend {
     font-weight: 300;
 }
 
+.routine-results:empty:before {
+    content: "So empty!";
+    font-size: 25px;
+    color: #fff;
+}
+
 .routine-results {
     margin: 30px;
     text-align: center;

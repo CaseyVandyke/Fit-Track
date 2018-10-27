@@ -9,6 +9,7 @@ const User = require('../models/users-model');
 
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
+/*
 router.get('/routines/:id', jwtAuth, (req, res, next) => {
   Routine.find({
       '_id': req.params.id
@@ -23,6 +24,8 @@ router.get('/routines/:id', jwtAuth, (req, res, next) => {
       }
   })
 });
+*/
+
 //Get all routines from the database
 router.get('/routines', jwtAuth, (req,res, next) => {
   console.log(req.user.username);
@@ -46,7 +49,7 @@ router.post('/routines', jwtAuth, (req,res, next) => {
     res.send(routine);
   }).catch(next)
 });
-// Update a routine in the databse
+/* Update a routine in the databse
 router.put('/routines/:id', jwtAuth, (req,res, next) => {
   Routine.findByIdAndUpdate({_id: req.params.id}, req.body)
   .then(function(){
@@ -55,6 +58,7 @@ router.put('/routines/:id', jwtAuth, (req,res, next) => {
     });
   });
 });
+*/
 
 //Delete a routine from the database
 router.delete('/routines/:id', jwtAuth, (req,res, next) => {

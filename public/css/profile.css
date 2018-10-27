@@ -78,11 +78,31 @@ body {
     text-align: center;
 }
 
+.delete-item {
+    color: #fff;
+    border: 2px solid #FF0000;
+    width: 80%;
+    height: 30px;
+    font-size: 20px;
+    border-radius: 3px;
+    padding: 5px;
+    text-decoration: none;
+    background: #2A2929;
+    margin: 10px;
+    cursor: pointer;
+}
+
+.diet-creation {
+    color: #fff;
+    font-size: 30px;
+    margin-top: 20px;
+}
+
 .icon-style {
     width: 350px;
     height: 330px;
     border: 2px solid #FFDB07;
-    margin: 60px 30px;
+    margin: 40px 30px 100px;
     display: inline-block;
     padding: 20px;
     border-radius: 3px;
@@ -186,50 +206,6 @@ legend {
     font-weight: 300;
 }
 
-/* Footer */
-
-.foot-container {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    margin: 0 auto;
-    width: 100%;
-    color: #fff;
-    font-weight: 100;
-    font-size: 12px;
-    background: #303030;
-    padding: 5px;
-}
-
-.social-container {
-    text-align: center;
-}
-
-.social-container>a {
-    margin: 0 20px;
-    color: #08FF83;
-}
-
-.copyright {
-    text-align: center;
-    margin-top: 10px;
-}
-
-.foot-mod {
-    margin: 5px 0 0 10px;
-}
-
-.support,
-.face,
-.tweet,
-.linked {
-    text-align: center;
-}
-
-.foot-icon {
-    text-decoration: none;
-}
-
 /* MEDIA QUERIES */
 
 @media only screen and (max-width: 930px) {
@@ -300,7 +276,7 @@ legend {
         height: 200px;
     }
 
-    .icon-style > li > a {
+    .icon-style>li>a {
         font-size: 20px;
     }
 
@@ -359,27 +335,27 @@ legend {
     }
 
     .routine-data,
-.routine-submit {
-    margin: 5px auto;
-    width: 200px;
-    padding: 5px;
-    border-radius: 3px;
-    border: 2px solid #08FF83;
-    color: #08FF83;
-    background-color: #212121;
-    font-size: 15px;
-    -webkit-appearance: none;
-}
+    .routine-submit {
+        margin: 5px auto;
+        width: 200px;
+        padding: 5px;
+        border-radius: 3px;
+        border: 2px solid #08FF83;
+        color: #08FF83;
+        background-color: #212121;
+        font-size: 15px;
+        -webkit-appearance: none;
+    }
 
-.target-muscle {
-    margin-top: 30px;
-}
+    .target-muscle {
+        margin-top: 30px;
+    }
 
-.routine-submit {
-    cursor: pointer;
-    border: 2px solid #08FF83;
-    color: #08FF83;
-}
+    .routine-submit {
+        cursor: pointer;
+        border: 2px solid #08FF83;
+        color: #08FF83;
+    }
 
 }
 

@@ -5,7 +5,8 @@ const User = require('../models/users-model');
 const router = express.Router();
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
-
+const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json();
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
 router.get('/user', (req, res, next) =>{
@@ -38,11 +39,9 @@ router.get('/users', (req, res, next) => {
 });
 
 // @CREATE NEW USER
-router.post('/users', jwtAuth, (req, res) => {
+router.post('/users', jsonParser, (req, res) => {
     const username = req.body.username;
     const pass = req.body.password;
-    const firstName = req.body.firstName;
-    const lastName = req.body.lastName;
 
 
     User
@@ -64,8 +63,6 @@ router.post('/users', jwtAuth, (req, res) => {
             return User.create({
                 username,
                 password: hash,
-                firstName: firstName,
-                lastName: lastName
             });
         })
         .then(newUser => {
