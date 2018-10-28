@@ -45,11 +45,6 @@
     text-transform: uppercase;
 }
 
-.profile-wrap {
-    text-align: center;
-    margin-top: 100px;
-}
-
 .diet-click {
     background-color: #2A2929;
     border: 2px solid #FFDB07;
@@ -122,6 +117,10 @@
     width: 200px;
     border-radius: 3px;
     vertical-align: top;
+    }
+
+    .diet-creation {
+        font-size: 20px;
     }
 
     .diet-category {

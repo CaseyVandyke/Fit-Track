@@ -154,7 +154,8 @@ ul a {
 }
 
 .profile-wrap {
-    margin: 10px;
+    text-align: center;
+    margin-top: 50px;
 }
 
 .profile-tab li {

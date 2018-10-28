@@ -21,11 +21,6 @@
     text-transform: uppercase;
 }
 
-.profile-wrap {
-    text-align: center;
-    margin-top: 100px;
-}
-
 .routine-catch {
     margin: 0 auto;
     text-align: center;
@@ -117,8 +112,10 @@ legend {
 
 .routine-creation {
     color: #fff;
-    font-size: 30px;
+    font-size: 25px;
     margin-top: 20px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
 }
 
 @media only screen and (max-width: 768px) {
@@ -138,6 +135,10 @@ legend {
     }
 
     .routine-category {
+        font-size: 20px;
+    }
+
+    .routine-creation {
         font-size: 20px;
     }
 }

@@ -18,7 +18,7 @@ $("#login-btn").on('click', function (e) {
     e.preventDefault();
     $(".login-results").html(`<section id="login-wrapper">
             <input type="text" placeholder="Username" class="js-username-auth">
-            <input type="password " placeholder="Password" class="js-password-auth">
+            <input type="password" placeholder="Password" class="js-password-auth">
             <br/>
             <button class="profile-login">Login</button>
     </section>`)
@@ -44,15 +44,28 @@ function createUser() {
                 password: password
             },
             success: (data) => {
-                if (data) {
-                    let jwt = data.authToken;
-                    sessionStorage.setItem('Bearer', jwt);
-                    $('.js-username-auth').val('');
-                    $('.js-password-auth').val('');
-                }
-                
-                const pageName = "./profile.html";
-                $(location).attr('href', pageName);
+
+                $.ajax({
+                    method: 'POST',
+                    url: '/api/auth/login',
+                    data: {
+                        username,
+                        password
+                    },
+                    dataType: "json",
+                    ContentType: 'application/json',
+                    success: function (data) {
+                        let jwt = data.authToken;
+                        sessionStorage.setItem('Bearer', jwt);
+                        const pageName = "./profile.html";
+                        $(location).attr('href', pageName);
+                    },
+                    error: (error) => {
+                        if (error) {
+                            $('#login-error').html(`<p>You have entered a wrong username or password try again`);
+                        }
+                    }
+                });
             },
 
             error: function (req, error) {

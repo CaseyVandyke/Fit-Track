@@ -40,7 +40,7 @@ body {
 #signup-btn {
     width: 400px;
     font-size: 30px;
-    margin-top: 80px;
+    margin-top: 30px;
     padding: 20px;
 
 }
@@ -66,7 +66,7 @@ body {
 }
 
 #wrapper {
-    margin: 10px auto 0;
+    margin: 0 auto;
 }
 
 .app-title {
@@ -75,7 +75,7 @@ body {
     font-weight: 500;
     font-size: 95px;
     letter-spacing: 1px;
-    margin-top: 100px;
+    margin-top: 20px;
     margin-bottom: 50px;
     text-transform: uppercase;
     background: #2A2929;
@@ -86,6 +86,47 @@ body {
         1px -1px 0 #FFDB07,
         -1px 1px 0 #FFDB07,
         1px 1px 0 #FFDB07;
+}
+
+.fit-info {
+    color: #fff;
+}
+
+.fit-info h2 {
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    font-size: 30px;
+}
+
+.fit-info ul {
+    display: flex;
+    justify-content: center;
+}
+
+.fit-info li {
+    display: inline-block;
+    margin: 30px;
+    border-radius: 3px; 
+    font-size: 18px;
+    list-style: none;
+    width: 200px;
+    border: 3px solid #FFDB07;
+    background: #2A2929;
+    opacity: .8;
+    color: #fff;
+    padding: 10px;
+}
+
+i {
+    display: block;
+    text-align: center;
+    color: #08FF83;
+}
+
+
+.directions-info {
+    padding: 10px;
+    margin-top: 10px;
 }
 
 .text-style {
@@ -202,7 +243,14 @@ body {
     .login-right {
         margin: 0 auto;
         text-align: right;
+        border-bottom: 2px solid #fff;
+        border-top: 2px solid #fff;
     }
+
+    body {
+        background: #2A2929
+    }
+
 
     .app-title {
         margin: 25px auto 50px;
@@ -221,7 +269,7 @@ body {
     #signup-btn {
         width: 250px;
         font-size: 20px;
-        margin-top: 120px;
+        margin-top: 20px;
         padding: 10px;
     }
 }
@@ -238,15 +286,25 @@ body {
     }
 
     .login-right {
-        text-align: center;
+        text-align: right;
     }
 
     #login-btn {
-        font-size: 20px;
-        position: relative;
-        top: 200px;
-        width: 250px;
-        padding: 10px;
+        background: none;
+        color: #fff;
+        border: 3px solid #FF0000;
+        top: 10px;
+        font-size: 15px;
+        width: 55px;
+        right: 20px;
+        margin: 20px;
+        text-transform: none;
+    }
+
+    .fit-info li {
+       font-size: 15px;
+       margin: 10px;
+       padding: 10px;
     }
 
     #login-error {
