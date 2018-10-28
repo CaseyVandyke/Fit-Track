@@ -127,7 +127,7 @@ describe('Routine API resource', function () {
                     // as number of posts in DB
                     res.body.should.have.lengthOf(count);
                 });
-             })
+            })
         });
     });
 
@@ -228,6 +228,54 @@ describe('Routine API resource', function () {
             });
         });
     });
+
+    describe('diarypost PUT request', function () {
+        it('should update fields sent', function () {
+            
+            var token = jwt.sign({
+                
+                        username,
+                        password
+                    
+            }, 
+            JWT_SECRET, 
+            {
+              algorithm: 'HS256',
+              subject: username,
+              expiresIn: '7d'
+            });
+            
+            User.find({"username" : username})
+            .then((users) => {
+
+
+                Routine
+                    .findOne()
+                    .then(entry => {
+                        updateRoutine.id = entry.id;
+                        return chai.request(app)
+                            .put(`/api/diets/${entry.id}`)
+                            .set('Content-Type', 'application/json')
+                            .set('Accept', 'application/json')
+                            .set('Authorization', `Bearer ${token}`)
+                            .send(updateRoutine);
+                    })
+                    .then(function (res) {
+                        expect(res).to.have.status(200);
+
+                        Routine.findById(updateRoutine.id);
+                    })
+                    .then(routine => {
+                        routine.targetMuscle.should.not.equal(null);
+                        routine.workout.should.not.equal(null);
+                        routine.sets.should.not.equal(null);
+                        routine.reps.should.not.equal(null);
+                        routine.author.should.not.equal(null);
+                    })
+                });
+        });
+    });
+
 
     //works
     describe('Diet DELETE endpoint', function () {

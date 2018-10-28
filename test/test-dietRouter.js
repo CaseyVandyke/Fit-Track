@@ -47,10 +47,7 @@ describe('Diet API resource', function () {
         runServer(TEST_DATABASE_URL);
         return User.hashPassword(password).then(password => {
 
-            User.create({
-                username,
-                password
-            }).then(userData => {
+            User.create({username, password}).then(userData => {
                 let newDiet = {
                     title: faker.lorem.text(),
                     calories: faker.lorem.text(),
@@ -62,11 +59,11 @@ describe('Diet API resource', function () {
                 Routine.create(newDiet);
             })
         })
-
+         
     });
 
     beforeEach(function () {
-
+        
     });
 
     afterEach(function () {
@@ -76,7 +73,7 @@ describe('Diet API resource', function () {
 
     after(function () {
         tearDownDb();
-        return closeServer();
+        return closeServer(); 
     });
 
     // note the use of nested `describe` blocks.
@@ -92,93 +89,91 @@ describe('Diet API resource', function () {
             //       in db.
             let res;
             var token = jwt.sign({
+                
+                        username,
+                        password
+                    
+            }, 
+            JWT_SECRET, 
+            {
+              algorithm: 'HS256',
+              subject: username,
+              expiresIn: '7d'
+            });
+            
+            User.find({"username" : username})
+            .then((users) => {
+            return chai.request(app)
+                .get('/api/diets')
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+                .set('Authorization', `Bearer ${token}`)
+                .send(newDiet)
+                .then(_res => {
+                    res = _res;
+                    res.should.have.status(200);
+                    // otherwise our db seeding didn't work
+                    res.body.should.have.lengthOf.at.least(1);
 
-                    username,
-                    password
-
-                },
-                JWT_SECRET, {
-                    algorithm: 'HS256',
-                    subject: username,
-                    expiresIn: '7d'
-                });
-
-            User.find({
-                    "username": username
+                    return Diet.count();
                 })
-                .then((users) => {
-                    return chai.request(app)
-                        .get('/api/diets')
-                        .set('Content-Type', 'application/json')
-                        .set('Accept', 'application/json')
-                        .set('Authorization', `Bearer ${token}`)
-                        .send(newDiet)
-                        .then(_res => {
-                            res = _res;
-                            res.should.have.status(200);
-                            // otherwise our db seeding didn't work
-                            res.body.should.have.lengthOf.at.least(1);
-
-                            return Diet.count();
-                        })
-                        .then(count => {
-                            // the number of returned posts should be same
-                            // as number of posts in DB
-                            res.body.should.have.lengthOf(count);
-                        });
+                .then(count => {
+                    // the number of returned posts should be same
+                    // as number of posts in DB
+                    res.body.should.have.lengthOf(count);
                 });
         });
-
     });
+
+});
 
     it('should return diets with right fields', function () {
         // Strategy: Get back all diets, and ensure they have expected keys
 
         let res;
-        var token = jwt.sign({
-
-                username,
-                password
-
-            },
-            JWT_SECRET, {
-                algorithm: 'HS256',
-                subject: username,
-                expiresIn: '7d'
+            var token = jwt.sign({
+                
+                        username,
+                        password
+                    
+            }, 
+            JWT_SECRET, 
+            {
+              algorithm: 'HS256',
+              subject: username,
+              expiresIn: '7d'
             });
-
-        User.find({
-                "username": username
-            })
+            
+            User.find({"username" : username})
             .then((users) => {
-                return chai.request(app)
-                    .get('/api/diets')
-                    .set('Content-Type', 'application/json')
-                    .set('Accept', 'application/json')
-                    .set('Authorization', `Bearer ${token}`)
-                    .then(function (res) {
+        return chai.request(app)
+            .get('/api/diets')
+            .set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+            .set('Authorization', `Bearer ${token}`)
+            .then(function (res) {
 
-                        res.should.have.status(200);
-                        res.should.be.json;
-                        res.body.should.be.a('array');
-                        res.body.should.have.lengthOf.at.least(1);
-                        res.body.forEach(function (dietPost) {
-                            dietPost.should.be.a('object');
-                            dietPost.should.include.keys('title', 'calories', 'recipe', 'notes', 'author');
-                        });
-                        // just check one of the posts that its values match with those in db
-                        // and we'll assume it's true for rest
-                        resDiet = res.body[0];
-                        return Diet.findById(resDiet._id);
-                    })
-                    .then(diet => {
-                        resDiet.title.should.equal(diet.title);
-                        resDiet.calories.should.equal(diet.calories);
-                        resDiet.recipe.should.equal(diet.recipe);
-                        resDiet.notes.should.equal(diet.notes);
-                        resDiet.author.should.equal(diet.author);
-                    });
+                res.should.have.status(200);
+                res.should.be.json;
+                res.body.should.be.a('array');
+                res.body.should.have.lengthOf.at.least(1);
+                res.body.forEach(function (dietPost) {
+                    dietPost.should.be.a('object');
+                    dietPost.should.include.keys('title', 'calories', 'recipe', 'notes', 'author');
+                });
+                // just check one of the posts that its values match with those in db
+                // and we'll assume it's true for rest
+                resDiet = res.body[0];
+                return Diet.findById(resDiet._id);
+            })
+            .then(diet => {
+                resDiet.title.should.equal(diet.title);
+                resDiet.calories.should.equal(diet.calories);
+                resDiet.recipe.should.equal(diet.recipe);
+                resDiet.notes.should.equal(diet.notes);
+                resDiet.author.should.equal(diet.author);
             });
+    });
     });
 
     describe('POST endpoint', function () {
@@ -189,48 +184,93 @@ describe('Diet API resource', function () {
         it('should add a new diet', function () {
             let res;
             var token = jwt.sign({
-
-                    username,
-                    password
-
-                },
-                JWT_SECRET, {
-                    algorithm: 'HS256',
-                    subject: username,
-                    expiresIn: '7d'
-                });
-
-            User.find({
-                    "username": username
+                
+                        username,
+                        password
+                    
+            }, 
+            JWT_SECRET, 
+            {
+              algorithm: 'HS256',
+              subject: username,
+              expiresIn: '7d'
+            });
+            
+            User.find({"username" : username})
+            .then((users) => {
+            return chai.request(app)
+                .post('/api/diets')
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+                .set('Authorization', `Bearer ${token}`)
+                .send(newDiet)
+                .then(function (res) {
+                    res.should.have.status(200);
+                    res.should.be.json;
+                    console.log(res.body);
+                    res.body.should.be.a('object');
+                    res.body.should.include.keys(
+                        'title', 'calories', 'recipe', 'notes', 'author');
+                    res.body.title.should.equal(newDiet.title);
+                    // cause Mongo should have created id on insertion
+                    res.body._id.should.not.equal(null);
+                    return Diet.findById(res.body._id);
                 })
-                .then((users) => {
+                .then(diet => {
+                    diet.title.should.not.equal(null);
+                    diet.calories.should.not.equal(null);
+                    diet.recipe.should.not.equal(null);
+                    diet.notes.should.not.equal(null);
+                    diet.author.should.not.equal(null);
+                });
+        });
+    });
+});
+
+    describe('diet PUT request', function () {
+        it('should update fields sent', function () {
+            let res;
+            var token = jwt.sign({
+                
+                        username,
+                        password
+                    
+            }, 
+            JWT_SECRET, 
+            {
+              algorithm: 'HS256',
+              subject: username,
+              expiresIn: '7d'
+            });
+            
+            User.find({"username" : username})
+            .then((users) => {
+
+
+             Diet
+                .findOne()
+                .then(entry => {
+                    updateDiet.id = entry.id;
                     return chai.request(app)
-                        .post('/api/diets')
+                        .put(`/api/diets/${entry.id}`)
                         .set('Content-Type', 'application/json')
                         .set('Accept', 'application/json')
                         .set('Authorization', `Bearer ${token}`)
-                        .send(newDiet)
-                        .then(function (res) {
-                            res.should.have.status(200);
-                            res.should.be.json;
-                            console.log(res.body);
-                            res.body.should.be.a('object');
-                            res.body.should.include.keys(
-                                'title', 'calories', 'recipe', 'notes', 'author');
-                            res.body.title.should.equal(newDiet.title);
-                            // cause Mongo should have created id on insertion
-                            res.body._id.should.not.equal(null);
-                            return Diet.findById(res.body._id);
-                        })
-                        .then(diet => {
-                            diet.title.should.not.equal(null);
-                            diet.calories.should.not.equal(null);
-                            diet.recipe.should.not.equal(null);
-                            diet.notes.should.not.equal(null);
-                            diet.author.should.not.equal(null);
-                        });
-                });
+                        .send(updateDiet);
+                })
+                .then(function (res) {
+                    expect(res).to.have.status(200);
+
+                    return Diet.findById(updateDiet.id);
+                })
+                .then(diet => {
+                    diet.title.should.not.equal(null);
+                    diet.calories.should.not.equal(null);
+                    diet.recipe.should.not.equal(null);
+                    diet.notes.should.not.equal(null);
+                })
         });
+    });
     });
 
     //works
@@ -238,40 +278,39 @@ describe('Diet API resource', function () {
         it('should delete a diet by id', function () {
             let res;
             var token = jwt.sign({
+                
+                        username,
+                        password
+                    
+            }, 
+            JWT_SECRET, 
+            {
+              algorithm: 'HS256',
+              subject: username,
+              expiresIn: '7d'
+            });
+            
+            User.find({"username" : username})
+            .then((users) => {
 
-                    username,
-                    password
-
-                },
-                JWT_SECRET, {
-                    algorithm: 'HS256',
-                    subject: username,
-                    expiresIn: '7d'
-                });
-
-            User.find({
-                    "username": username
+             Diet
+                .findOne()
+                .then(_post => {
+                    deletedDiet = _post;
+                    return chai.request(app)
+                        .delete(`/api/diets/${deletedDiet._id}`)
+                        .set('Content-Type', 'application/json')
+                        .set('Accept', 'application/json')
+                        .set('Authorization', `Bearer ${token}`)
                 })
-                .then((users) => {
-
-                    Diet
-                        .findOne()
-                        .then(_post => {
-                            deletedDiet = _post;
-                            return chai.request(app)
-                                .delete(`/api/diets/${deletedDiet._id}`)
-                                .set('Content-Type', 'application/json')
-                                .set('Accept', 'application/json')
-                                .set('Authorization', `Bearer ${token}`)
-                        })
-                        .then(res => {
-                            res.should.have.status(200);
-                            return Diet.findById(deletedDiet._id);
-                        })
-                        .then(post => {
-                            should.not.exist(post);
-                        });
+                .then(res => {
+                    res.should.have.status(200);
+                    return Diet.findById(deletedDiet._id);
+                })
+                .then(post => {
+                    should.not.exist(post);
                 });
         });
     });
 });
+    });
