@@ -85,6 +85,8 @@ describe('User api routes', function () {
                 });
         });
     });
+});
+/*
 
     describe('POST request for /users', function () {
         it('should create a new user in the database', function () {
@@ -166,3 +168,4 @@ describe('DELETE request for /users/:id', function () {
     });
 });
 });
+*/

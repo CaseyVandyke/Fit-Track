@@ -100,6 +100,8 @@ describe('Diet API resource', function () {
               subject: username,
               expiresIn: '7d'
             });
+
+            
             
             User.find({"username" : username})
             .then((users) => {
@@ -126,6 +128,8 @@ describe('Diet API resource', function () {
     });
 
 });
+});
+/*
 
     it('should return diets with right fields', function () {
         // Strategy: Get back all diets, and ensure they have expected keys
@@ -314,3 +318,4 @@ describe('Diet API resource', function () {
     });
 });
     });
+    */

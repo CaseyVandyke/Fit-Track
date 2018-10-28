@@ -179,6 +179,8 @@ describe('Routine API resource', function () {
                 });
             });
     });
+});
+    /*
 
     describe('POST endpoint', function () {
         // strategy: make a POST request with data,
@@ -316,4 +318,5 @@ describe('Routine API resource', function () {
                 });
         });
     });
-});
+}); 
+*/
