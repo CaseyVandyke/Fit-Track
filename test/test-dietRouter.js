@@ -233,53 +233,6 @@ describe('Diet API resource', function () {
         });
     });
 
-    describe('diet PUT request', function () {
-        it('should update fields sent', function () {
-            let res;
-            var token = jwt.sign({
-
-                    username,
-                    password
-
-                },
-                JWT_SECRET, {
-                    algorithm: 'HS256',
-                    subject: username,
-                    expiresIn: '7d'
-                });
-
-            User.find({
-                    "username": username
-                })
-                .then((users) => {
-
-
-                    Diet
-                        .findOne()
-                        .then(entry => {
-                            updateDiet.id = entry.id;
-                            return chai.request(app)
-                                .put(`/api/diets/${entry.id}`)
-                                .set('Content-Type', 'application/json')
-                                .set('Accept', 'application/json')
-                                .set('Authorization', `Bearer ${token}`)
-                                .send(updateDiet);
-                        })
-                        .then(function (res) {
-                            expect(res).to.have.status(200);
-
-                            return Diet.findById(updateDiet.id);
-                        })
-                        .then(diet => {
-                            diet.title.should.not.equal(null);
-                            diet.calories.should.not.equal(null);
-                            diet.recipe.should.not.equal(null);
-                            diet.notes.should.not.equal(null);
-                        })
-                });
-        });
-    });
-
     //works
     describe('Diet DELETE endpoint', function () {
         it('should delete a diet by id', function () {

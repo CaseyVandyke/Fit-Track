@@ -46,6 +46,7 @@ body {
     text-decoration: none;
     color: #fff;
     font-size: 20px;
+    padding: 10px;
 }
 
 .nav-container .active {
@@ -101,7 +102,7 @@ body {
 .icon-style {
     width: 350px;
     height: 330px;
-    border: 2px solid #FFDB07;
+    border: 2px solid #FEE233;
     margin: 40px 30px 100px;
     display: inline-block;
     padding: 20px;

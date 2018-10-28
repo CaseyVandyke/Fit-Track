@@ -109,34 +109,7 @@ describe('User api routes', function () {
         });
     });
 
-describe('PUT request for /users/:id', function () {
-    it('should update a user in the database with a specific id', function () {
-        let user = generateUserData();
-        var token = jwt.sign({
-            user
-        }, JWT_SECRET);
 
-        let updateData = {
-            username: faker.internet.userName()
-        }
-
-        User
-            .findOne()
-            .then(user => {
-                return chai.request(app)
-                    .put(`/users/${user.id}`)
-                    .set('Authorization', `Bearer ${token}`)
-                    .send(updateData);
-            })
-            .then(res => {
-                res.should.have.status(204);
-            })
-            .then(updatedUser => {
-                updatedUser.should.deep.equal(updateData);
-            });
-
-    });
-});
 
 //works
 describe('DELETE request for /users/:id', function () {
