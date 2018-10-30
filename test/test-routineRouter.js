@@ -1,32 +1,25 @@
 /*'use strict';
-
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const faker = require('faker');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
-
 // this makes the should syntax available throughout
 // this module
 const should = require('chai').should();
 const expect = chai.expect;
-
 const Routine = require('../models/routine-model');
 const User = require('../models/users-model');
-
 const {
     closeServer,
     runServer,
     app
 } = require('../server');
-
 const {
     TEST_DATABASE_URL,
     JWT_SECRET
 } = require('../config');
-
 chai.use(chaiHttp);
-
 // this function deletes the entire database.
 // we'll call it in an `afterEach` block below
 // to ensure  ata from one test does not stick
@@ -39,15 +32,9 @@ function tearDownDb() {
             .catch(err => reject(err));
     });
 }
-
-
-
-
 const username = faker.internet.userName();
 const password = faker.internet.password();
-
 describe('Routine API resource', function () {
-
     before(function () {
           runServer(TEST_DATABASE_URL);
            return User.hashPassword(password).then(password => {
@@ -66,25 +53,19 @@ describe('Routine API resource', function () {
         })
          
     });
-
     beforeEach(function () {
         
     });
-
     afterEach(function () {
         // tear down database so we ensure no state from this test
         // effects any coming after.
         //return tearDownDb();
     });
-
     after(function () {
         tearDownDb();
         return closeServer();
     });
-
-
     describe('GET endpoint', function () {
-
         it('should return all existing routines', function () {
             // strategy:
             //    1. get back all routines returned by by GET request to `/routines`
@@ -119,7 +100,6 @@ describe('Routine API resource', function () {
                     res.should.have.status(200);
                     // otherwise our db seeding didn't work
                     res.body.should.have.lengthOf.at.least(1);
-
                     Routine.count();
                 })
                 .then(count => {
@@ -130,10 +110,8 @@ describe('Routine API resource', function () {
             })
         });
     });
-
     it('should return routines with right fields', function () {
         // Strategy: Get back all routines, and ensure they have expected keys
-
         let resRoutine;
         var token = jwt.sign({
                 
@@ -156,7 +134,6 @@ describe('Routine API resource', function () {
                 .set('Accept', 'application/json')
                 .set('Authorization', `Bearer ${token}`)
                 .then(function (res) {
-
                     res.should.have.status(200);
                     res.should.be.json;
                     res.body.should.be.a('array');
@@ -179,8 +156,6 @@ describe('Routine API resource', function () {
                 });
             });
     });
-
-
     describe('POST endpoint', function () {
         // strategy: make a POST request with data,
         // then prove that the post we get back has
@@ -229,7 +204,6 @@ describe('Routine API resource', function () {
             });
         });
     });
-
     describe('diarypost PUT request', function () {
         it('should update fields sent', function () {
             
@@ -248,8 +222,6 @@ describe('Routine API resource', function () {
             
             User.find({"username" : username})
             .then((users) => {
-
-
                 Routine
                     .findOne()
                     .then(entry => {
@@ -263,7 +235,6 @@ describe('Routine API resource', function () {
                     })
                     .then(function (res) {
                         expect(res).to.have.status(200);
-
                         Routine.findById(updateRoutine.id);
                     })
                     .then(routine => {
@@ -276,8 +247,6 @@ describe('Routine API resource', function () {
                 });
         });
     });
-
-
     //works
     describe('Diet DELETE endpoint', function () {
         it('should delete a routine by id', function () {
@@ -296,7 +265,6 @@ describe('Routine API resource', function () {
             
             User.find({"username" : username})
             .then((users) => {
-
                 Routine
                     .findOne()
                     .then(_post => {
@@ -318,5 +286,4 @@ describe('Routine API resource', function () {
         });
     });
 }); 
-
 */

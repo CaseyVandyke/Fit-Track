@@ -1,3 +1,12 @@
+const assert = require('assert');
+
+describe ('demo test', function() {
+
+    it('adds two numbers', function() {
+        assert(2 + 3 === 5);
+    })
+})
+
 /*"use strict";
 
 const chai = require('chai');

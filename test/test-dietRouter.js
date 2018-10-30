@@ -1,11 +1,9 @@
 /*'use strict';
-
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const faker = require('faker');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
-
 // this makes the should syntax available throughout
 // this module
 const should = require('chai').should();
@@ -21,9 +19,7 @@ const {
     TEST_DATABASE_URL,
     JWT_SECRET
 } = require('../config');
-
 chai.use(chaiHttp);
-
 // this function deletes the entire database.
 // we'll call it in an `afterEach` block below
 // to ensure  ata from one test does not stick
@@ -36,17 +32,12 @@ function tearDownDb() {
             .catch(err => reject(err));
     });
 }
-
 const username = faker.internet.userName();
 const password = faker.internet.password();
-
-
 describe('Diet API resource', function () {
-
     before(function () {
         runServer(TEST_DATABASE_URL);
         return User.hashPassword(password).then(password => {
-
             User.create({username, password}).then(userData => {
                 let newDiet = {
                     title: faker.lorem.text(),
@@ -61,26 +52,21 @@ describe('Diet API resource', function () {
         })
          
     });
-
     beforeEach(function () {
         
     });
-
     afterEach(function () {
         // tear down database so we ensure no state from this test
         // effects any coming after.
     });
-
     after(function () {
         tearDownDb();
         return closeServer(); 
     });
-
     // note the use of nested `describe` blocks.
     // this allows us to make clearer, more discrete tests that focus
     // on proving something small
     describe('GET endpoint', function () {
-
         it('should return all existing diets', function () {
             // strategy:
             //    1. get back all diets returned by GET request to `/posts`
@@ -100,7 +86,6 @@ describe('Diet API resource', function () {
               subject: username,
               expiresIn: '7d'
             });
-
             
             
             User.find({"username" : username})
@@ -116,7 +101,6 @@ describe('Diet API resource', function () {
                     res.should.have.status(200);
                     // otherwise our db seeding didn't work
                     res.body.should.have.lengthOf.at.least(1);
-
                     return Diet.count();
                 })
                 .then(count => {
@@ -126,12 +110,9 @@ describe('Diet API resource', function () {
                 });
         });
     });
-
 });
-
     it('should return diets with right fields', function () {
         // Strategy: Get back all diets, and ensure they have expected keys
-
         let res;
             var token = jwt.sign({
                 
@@ -154,7 +135,6 @@ describe('Diet API resource', function () {
             .set('Accept', 'application/json')
             .set('Authorization', `Bearer ${token}`)
             .then(function (res) {
-
                 res.should.have.status(200);
                 res.should.be.json;
                 res.body.should.be.a('array');
@@ -177,7 +157,6 @@ describe('Diet API resource', function () {
             });
     });
     });
-
     describe('POST endpoint', function () {
         // strategy: make a POST request with data,
         // then prove that the post we get back has
@@ -228,7 +207,6 @@ describe('Diet API resource', function () {
         });
     });
 });
-
     describe('diet PUT request', function () {
         it('should update fields sent', function () {
             let res;
@@ -247,8 +225,6 @@ describe('Diet API resource', function () {
             
             User.find({"username" : username})
             .then((users) => {
-
-
              Diet
                 .findOne()
                 .then(entry => {
@@ -262,7 +238,6 @@ describe('Diet API resource', function () {
                 })
                 .then(function (res) {
                     expect(res).to.have.status(200);
-
                     return Diet.findById(updateDiet.id);
                 })
                 .then(diet => {
@@ -274,7 +249,6 @@ describe('Diet API resource', function () {
         });
     });
     });
-
     //works
     describe('Diet DELETE endpoint', function () {
         it('should delete a diet by id', function () {
@@ -294,7 +268,6 @@ describe('Diet API resource', function () {
             
             User.find({"username" : username})
             .then((users) => {
-
              Diet
                 .findOne()
                 .then(_post => {
